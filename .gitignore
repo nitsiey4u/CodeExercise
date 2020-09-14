@@ -1,3 +1,3 @@
-
-LinkedList/linked_list.out.dSYM/Contents/Info.plist
-LinkedList/linked_list.out.dSYM/Contents/Resources/DWARF/linked_list.out
+*.out
+*.plist
+*.DS_Store
