@@ -4,12 +4,12 @@
 #include "limits.h"
 #include "math.h"
 
-#define MAX_BUFF_SIZE 100000
+#define MAX_BUFF_SIZE   100000
 #define show_bool(val) ((val) ? "True" : "False")
 
-typedef unsigned long long int  ullint_t;
-typedef long long int           llint_t;
-typedef unsigned int            uint_t;
+typedef unsigned long long int  ullint_t;   // 8 bytes unsigned
+typedef long long int           llint_t;    // 8 bytes signed
+typedef unsigned int            uint_t;     // 4 bytes unsigned
 
 // Converts ASCII String to Integer (MSB)
 llint_t StringtoNumericMSB(const char* strValue) {
@@ -36,6 +36,7 @@ llint_t StringtoNumericLSB(const char* strValue) {
   return intValue * signFlag;
 }
 
+// Count number of digits
 uint_t CountNumberOfDigits(const int numValue) {
   uint_t counter = 1;
   for(int value = numValue; value > 10; (value = value / 10)) {
@@ -44,11 +45,13 @@ uint_t CountNumberOfDigits(const int numValue) {
   return counter;
 }
 
+// Extract digit at specific position
 uint_t ExtractDigit(const ullint_t numValue, const uint_t digitPos) {
   ullint_t factorVal = pow(10, (digitPos - 1));
   ullint_t resultVal = numValue / factorVal;
   return resultVal % 10;
 }
+
 // Check if number is perfect square
 bool isPerfectSquare(const uint_t numVal) {
   uint_t index;
@@ -56,6 +59,7 @@ bool isPerfectSquare(const uint_t numVal) {
   return ((index * index) == numVal);
 }
 
+// Find factorial of given number
 ullint_t NumberFactorial(const ullint_t numValue) {
   if (numValue > 1) {
     return numValue * NumberFactorial(numValue - 1);
@@ -63,11 +67,13 @@ ullint_t NumberFactorial(const ullint_t numValue) {
   return 1;
 }
 
+// Valid if input number is power of another number
 bool IsValidPower(const ullint_t numValue, const ullint_t powFactor) {
   ullint_t tmpValue;
   for(tmpValue = numValue; tmpValue > powFactor; tmpValue = (tmpValue / powFactor));
   return (tmpValue == powFactor);
 }
+
 
 void DisplayNumbertoString(const int numValue) {
   char* strValue = NULL;
