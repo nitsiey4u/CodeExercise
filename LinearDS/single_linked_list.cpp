@@ -385,14 +385,33 @@ NODE* reverse_sublist_group(NODE* head, const int group) {
   return main;
 }
 
+// Recursively reverse linked list
+void recursive_reverse(NODE* curr, NODE* prev, NODE* &headRef) {
+  if(curr == NULL) {
+    // Reached end of linked list
+    headRef = prev;
+  } else {
+    // Recursively call over to next node
+    recursive_reverse(curr->next, curr, headRef);
+    // Assign current next to previous
+    curr->next = prev;
+  }
+}
+
 int main() {
-  int arr[] = {1, 2, 3, 4, 5};
+  int arr[] = {1, 2};
   int size = sizeof(arr)/sizeof(arr[0]);
   NODE* head = array_to_list(arr, size);
   display_list(head);
-  head = reverse_sublist_group(head, 1);
+
+  recursive_reverse(head, NULL, head);
   display_list(head);
+
   delete_list(head);
+
+  // head = reverse_sublist_group(head, 1);
+  // display_list(head);
+  // delete_list(head);
 
   // head = reverse_merge_list(head);
   // display_list(head);
