@@ -181,7 +181,6 @@ void postorder_walkover(BTREE* root) {
   }
 }
 
-
 // Level order traversal (BFS)
 void level_order_traversal(BTREE* root) {
   int level, internal, leaves, counter, previous;
@@ -232,7 +231,6 @@ void level_order_traversal(BTREE* root) {
   printf("\nTotal Levels: %d, Nodes: %d, Internal: %d, Leaves: %d",
             level, counter, internal, leaves);
 }
-
 
 // Create binary tree from input array
 BTREE* create_tree(char array[], int index, int size) {
@@ -541,19 +539,19 @@ bool find_path(BTREE* root, const char key, vector<char>& path) {
   return false;
 }
 
-// Find least common ancestor of two nodes
-char find_lca(BTREE* root, const char node1, const char node2) {
+// Find least common ancestor of two keys
+char find_lca(BTREE* root, const char key1, const char key2) {
   char lca = '\0';
   // Find path from root to node1 - O(N)
   vector<char> path1;
-  if(!find_path(root, node1, path1)) {
-    printf("\nNo path found for %c", node1);
+  if(!find_path(root, key1, path1)) {
+    printf("\nNo path found for %c", key1);
     return lca;
   }
   // Find path from root to node2 - O(N)
   vector<char> path2;
-  if(!find_path(root, node2, path2)) {
-    printf("\nNo path found for %c", node2);
+  if(!find_path(root, key2, path2)) {
+    printf("\nNo path found for %c", key2);
     return lca;
   }
   int i, j;
