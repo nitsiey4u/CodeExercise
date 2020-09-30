@@ -16,6 +16,11 @@ typedef unsigned long long int  ullint_t;   // 8 bytes unsigned
 typedef long long int           llint_t;    // 8 bytes signed
 typedef unsigned int            uint_t;     // 4 bytes unsigned
 
+// Comparator
+int comparator(const void* a, const void *b) {
+  return (*(int*)a - *(int*)b);
+}
+
 // Validate constant pointer and pointer to constant
 void validate_constant_pointer() {
 	int val1 = 10;
@@ -248,7 +253,30 @@ void base_to_decimal(const char* value, const int base) {
 	printf("\nDecimal Output = %d", decimal);
 }
 
-int main(int argc, char* argv[]) {
+// Find pairs of value with matching sum
+void sum_pairs(int arr[], int size, const int sum) {
+	qsort(arr, size, sizeof(int), comparator);
+  int low  = 0;
+  int high = size - 1;
+  int count = 0;
+  while(low < high) {
+    if((arr[low] + arr[high]) == sum) {
+      printf("\nFound pair: (%d %d)", arr[low], arr[high]);
+      high --;
+      low ++;
+      count ++;
+    } else if((arr[low] + arr[high]) > sum) {
+      high --;
+    }
+    else {
+      low ++;
+    }
+  }
+}
 
+int main(int argc, char* argv[]) {
+	// int arr[] = {1, 5, 7, -1, 5};
+  // int size  = sizeof(arr)/sizeof(arr[0]);
+  // sum_pairs(arr, size, 6);
 	return 0;
 }

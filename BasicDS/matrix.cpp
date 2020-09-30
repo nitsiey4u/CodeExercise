@@ -4,6 +4,10 @@
 #include "stdio.h"
 #include "stdlib.h"
 
+// Matrix for range queries
+#define RNG_ROWS 3
+#define RNG_COLS 4
+
 // Matrix for diagonal, spiral printing
 #define MAX_ROWS 5    // Matrix 5 x 4
 #define MAX_COLS 4    // Matrix 5 x 4
@@ -20,9 +24,150 @@
 #define CLR_ROWS 8
 #define CLR_COLS 8
 
+//  Maximum dircetions for matrix traversal
 #define MAX_DIRS 4
 
-// Utility to dynamically allocated matrix
+// Position in matrix (row, col)
+struct Position {
+  int row;
+  int col;
+};
+typedef struct Position POS;
+
+// Class to hold all integers values and their cumulative sum in matrix
+class RectangleSum {
+private:
+  int   max_rows;   // Max rows
+  int   max_cols;   // Max columns
+
+  int** arr_vals;   // Matrix of integers (input)
+  int** cum_sums;   // Matrix of cumulative sum of integers
+public:
+  // Constructor to initialize matrix and cumulative sum
+  RectangleSum(int arr[][RNG_COLS], int rows, int cols) {
+    max_rows = rows;
+    max_cols = cols;
+    // Dynamically allocate both arrays
+    arr_vals = (int**) calloc(max_rows, sizeof(int*));
+    cum_sums = (int**) calloc(max_rows, sizeof(int*));
+    for(int index = 0; index < max_rows; index++) {
+      arr_vals[index] = (int*) calloc(max_cols, sizeof(int));
+      cum_sums[index] = (int*) calloc(max_cols, sizeof(int));
+    }
+    int row, col, sum;
+    // Populate row 0
+    for(row = 0, col = 0, sum = 0; col < max_cols; col++) {
+      arr_vals[row][col] = arr[row][col];
+      sum = sum + arr_vals[row][col];
+      cum_sums[row][col] = sum;
+    }
+    // Populate column 0
+    for(row = 0, col = 0, sum = 0; row < max_rows; row++) {
+      arr_vals[row][col] = arr[row][col];
+      sum = sum + arr_vals[row][col];
+      cum_sums[row][col] = sum;
+    }
+    // Populate remaining rows and columns
+    for(int row = 1; row < max_rows; row++) {
+      for(int col = 1; col < max_cols; col++) {
+        arr_vals[row][col] = arr[row][col];
+        int curr_sum = cum_sums[row][col - 1] +     // Left Column
+                       cum_sums[row - 1][col] +     // Top Row
+                       arr[row][col];               // Current Value
+        int prev_sum = cum_sums[row - 1][col - 1];  // Diagonal Value
+        cum_sums[row][col] = curr_sum - prev_sum;   // Rectangular sum
+      }
+    }
+  }
+  // Destructor
+  ~RectangleSum() {
+    for(int index = 0; index < max_rows; index++) {
+      free(arr_vals[index]);
+      free(cum_sums[index]);
+    }
+    free(arr_vals);
+    free(cum_sums);
+  }
+  // The cumulative sum for matrix rectangle starts from (0,0)
+  // For left-top and right-bottom positions find sum of integers in rectangle
+  int get_ranged_sum(Position& start, Position& end) {
+    if(start.row == 0) {
+      if(start.col == 0) {
+        // All cumulative sums are indexed at (0, 0) by default
+        return cum_sums[end.row][end.col];
+      } else {
+        // Remove unused left-most column
+        return cum_sums[end.row][end.col] -
+               cum_sums[end.row][start.col - 1];
+      }
+    } else {
+      if(start.col == 0) {
+        // Remove unused top-most row
+        return cum_sums[end.row][end.col] -
+               cum_sums[start.row - 1][end.col];
+      } else {
+        // Remove unused left-most column and top-most row
+        int remval = cum_sums[end.row][start.col - 1] +
+                     cum_sums[start.row - 1][end.col];
+        // Diagonally previous element of start needs to be added back
+        // again because above remove has overlappingly removed element
+        int diaval = cum_sums[start.row - 1][start.col - 1];
+        // From cumulative sum of destination remove unused portions
+        // and add diagonally previous element of source (as it was removed twice)
+        return (cum_sums[end.row][end.col] - remval) + diaval;
+      }
+    }
+    return -1;
+  }
+  // Display input integers
+  void display_arr_value() {
+    printf("\nArray Values: ");
+    for(int row = 0; row < max_rows; row++) {
+      printf("\n");
+      for(int col = 0; col < max_cols; col++) {
+        printf("\t%d", arr_vals[row][col]);
+      }
+    }
+  }
+  // Display cumulative sum
+  void display_sum_total() {
+    printf("\nCumulative Sum: ");
+    for(int row = 0; row < max_rows; row++) {
+      printf("\n");
+      for(int col = 0; col < max_cols; col++) {
+        printf("\t%d", cum_sums[row][col]);
+      }
+    }
+  }
+};
+
+// Driver for Rectangle Sum
+void execute_rectangle_sum() {
+  // Default array
+  int arr[RNG_ROWS][RNG_COLS] = {
+    {1, 3,  5,  7},
+    {2, 4,  6,  8},
+    {9, 10, 11, 12},
+  };
+  RectangleSum range(arr, RNG_ROWS, RNG_COLS);
+  range.display_arr_value();
+  range.display_sum_total();
+  Position start, end;
+  int row1, col1, row2, col2;
+  for(row1 = 0, col1 = 0; col1 < (RNG_COLS - 1) && row1 < (RNG_ROWS - 1); col1++, row1++) {
+    for(row2 = (row1 + 1), col2 = (col1 + 1); col2 < RNG_COLS; col2++) {
+      start.row = row1;
+      start.col = col1;
+      end.row   = row2;
+      end.col   = col2;
+      printf("\nTotal Sum: %d %d -> %d %d \t = %d",
+        start.row, start.col, end.row, end.col,
+        range.get_ranged_sum(start, end));
+    }
+  }
+}
+
+// Utility to dynamically allocated 2-D matrix
 void dynamic_alloc(int** arr) {
   int i;
   arr = (int **) malloc(sizeof(int *) * MAX_ROWS);
@@ -334,6 +479,7 @@ int matrix_2determinant(int** arr, int i, int j, int x, int y) {
   return val;
 }
 
+
 // Helper function to get determinant of 3D matrix
 int matrix_3determinant(int** arr, int row, int col) {
   int value = 0;
@@ -355,10 +501,47 @@ int matrix_3determinant(int** arr, int row, int col) {
   return value;
 }
 
+// Helper function to create, initialize and display 3D matrix
+// 3D matrix = array of 2D matrices
+void allocate_3darray(int blocks, int rows, int cols) {
+  int*** array = (int***)malloc(sizeof(int**) * blocks);
+  int counter  = 1;
+  // Allocate (dynamic) and initialize 3D matrix
+  for(int block = 0; block < blocks; block++) {
+    array[block] = (int**)malloc(sizeof(int*) * rows);
+    for(int row = 0; row < rows; row++) {
+      array[block][row] = (int*)malloc(sizeof(int) * cols);
+      for(int col = 0; col < cols; col++) {
+        array[block][row][col] = counter++;
+      }
+    }
+  }
+  // Display 3D matrix
+  for(int block = 0; block < blocks; block++) {
+    printf("\n[%d]: ", block);
+    for(int row = 0; row < rows; row++) {
+      printf("\n");
+      for(int col = 0; col < cols; col++) {
+        printf("\t%d", array[block][row][col]);
+      }
+    }
+    printf("\n");
+  }
+  // Deallocate
+  for(int block = 0; block < blocks; block++) {
+    for(int row = 0; row < rows; row++) {
+      free(array[block][row]);
+    }
+    free(array[block]);
+  }
+  free(array);
+}
+
 // Main driver function
 int main(int argc, char* argv[]) {
-  display_paint(clr);
-  paint_function(clr, 4, 4, 2);
-  display_paint(clr);
+  // display_paint(clr);
+  // paint_function(clr, 4, 4, 2);
+  // display_paint(clr);
+  // execute_rectangle_sum();
   return 0;
 }
