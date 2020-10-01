@@ -253,15 +253,17 @@ void find_subset_sum(int arr[], const int size, const int total) {
   // Initialize all rows and columns in subset sum matrix
   for(int row = 0; row < row_count; row++) {
     for(int col = 0; col < col_count; col++) {
+      // Only column 0 is set to true, everything else false
       subset_matrix[row][col] = (col == 0);
     }
   }
+  // Matrix top left corner (0,0) is also set to true
   subset_matrix[0][0] = true;
 
   // // Display subset sum matrix
   // display_subsetsum_matrix(arr, subset_matrix, row_count, col_count);
 
-  // Fill sub set sum matrix
+  // Fill sub set sum matrix with truth table
   for(int row = 1; row < row_count; row++) {
     for(int col = 1; col < col_count; col++) {
       // Compare array value and sum value
@@ -294,7 +296,7 @@ void find_subset_sum(int arr[], const int size, const int total) {
     printf("\t%d", arr[index]);
   }
   printf("\nExpected sum: %d", total);
-  // Check bottom right last value
+  // Check bottom right last value for solution possibility
   if(subset_matrix[row_count - 1][col_count - 1] == true) {
     printf("\nAvailable set:");
     int row = row_count - 1;
@@ -323,7 +325,7 @@ void find_subset_sum(int arr[], const int size, const int total) {
     printf("\nSum does not exist in given set of numbers.");
   }
 
-  //  Deallocate
+  //  Deallocate subset matrix and related arrays
   for(int index = 0; index < row_count; index++) {
     free(subset_matrix[index]);
   }
