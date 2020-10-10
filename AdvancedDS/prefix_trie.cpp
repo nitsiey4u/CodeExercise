@@ -1,3 +1,7 @@
+/**********************************************************
+  Dictionary of words, record of phone numbers using DS
+  Prefix Trie : N-Ary Tree for storing word/phone info
+***********************************************************/
 #include "stdio.h"
 #include "stdlib.h"
 #include "limits.h"
@@ -7,6 +11,7 @@
 #define BOOL(X)   ((X)?"True":"False")
 using namespace std;
 
+// Definition of Trie Node
 struct Trie{
   bool         isEndofWord;
   struct Trie* children[RANGE_MAX];
