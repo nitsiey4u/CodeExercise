@@ -1,14 +1,253 @@
-#include "stdio.h"
-#include "stdlib.h"
-#include "memory.h"
+#include <cstdio>
+#include <cstdlib>
+#include <memory>
 #include <string>
-#define MAX_SIZE 100
+#include <fstream>
+#include <unordered_map>
+
+#define MAX_HEAP  10
+#define MAX_SIZE  100
+
+using namespace std;
 
 void swap(int* a, int *b) {
   int temp = *a;
   *a = *b;
   *b = temp;
 }
+
+// Struct for word info
+struct WordInfo {
+  string  word;
+  int     frequency;
+};
+typedef struct WordInfo NODE;
+
+// Find K most frequent words in file
+class WordFile {
+private:
+  // Min-Heap to store K frequent words
+  NODE**  MIN_HEAP;
+  // Hash map to store word frequency
+  unordered_map<string, NODE*> HASH_MAP;
+  // File name used for processing
+  fstream word_file;
+  // K count of words to be maintained
+  int     heap_size;
+  // Actual usage of heap
+  int     heap_usage;
+  // Bool tracking usage of heap
+  bool    heap_ready;
+
+public:
+  // Constructor
+  WordFile(const int count) {
+    heap_usage = 0;
+    heap_size  = count;
+    heap_ready = false;
+    MIN_HEAP   = (NODE**) malloc(sizeof(NODE*) * heap_size);
+  }
+
+  // Check if heap usage has reached max limit
+  bool isHeapFull() {
+    return (heap_usage == heap_size);
+  }
+
+  // Swap heap nodes (pass by reference)
+  void SwapValues(NODE* & ptr1, NODE* & ptr2) {
+    NODE* temp = ptr1;
+    ptr1 = ptr2;
+    ptr2 = temp;
+  }
+
+  // Get frequency for specific word using heap node
+  int GetFrequency(NODE* info) {
+    return info->frequency;
+  }
+
+  // Set frequency for specific word using heap node
+  void SetFrequency(NODE* & info, const int count) {
+    info->frequency = count;
+  }
+
+  // Heap node percolate upwards
+  void PercolateUpwards(const int index) {
+    if((index >= 0) && (index < heap_usage)) {
+      int current = index;
+      int parent  = floor((current - 1)/ 2);
+      if((parent >= 0) &&
+         (GetFrequency(MIN_HEAP[current]) < GetFrequency(MIN_HEAP[parent]))) {
+        SwapValues(MIN_HEAP[current], MIN_HEAP[parent]);
+        PercolateUpwards(parent);
+      }
+    }
+  }
+
+  // Decrease key of newly inserted heap node
+  void DecreaseKey(const int index, const int decrease) {
+    SetFrequency(MIN_HEAP[index], decrease);
+    PercolateUpwards(index);
+  }
+
+  // Call Min Heapify on index (ensuring smallest top element)
+  void MinHeapify(const int index) {
+    int parent = index;
+    int left   = 2 * index + 1;
+    int right  = 2 * index + 2;
+    int small  = parent;
+    // Check if left is smaller
+    if((left < heap_usage) &&
+       (GetFrequency(MIN_HEAP[left]) < GetFrequency(MIN_HEAP[small]))) {
+      small = left;
+    }
+    // Check if right is smaller
+    if((right < heap_usage) &&
+       (GetFrequency(MIN_HEAP[right]) < GetFrequency(MIN_HEAP[small]))) {
+      small = right;
+    }
+    // If small index different than parent
+    if(small != parent) {
+      SwapValues(MIN_HEAP[small], MIN_HEAP[parent]);
+      MinHeapify(small);
+    }
+  }
+
+  // Build Min Heap
+  void BuildMinHeap(const int low, const int high) {
+    int limit = floor((high - low)/2);
+    for(int index = limit; index >=0; index--) {
+      MinHeapify(index);
+    }
+  }
+
+  // Insert new heap node (ensuring smallest top element)
+  bool InsertWordInfo(NODE* info) {
+    bool retval = false;
+    if(isHeapFull()) {
+      // Check if min heap is ready
+      if(!heap_ready) {
+        // Build min heap, as its not ready
+        BuildMinHeap(0, (heap_usage - 1));
+        heap_ready = true;
+      }
+      // Replace only when, new word frequency > root word frequency
+      int root_frequency = GetFrequency(MIN_HEAP[0]);
+      if(info->frequency > root_frequency) {
+        // Insert new root and call min heapify
+        MIN_HEAP[0] = info;
+        MinHeapify(0);
+        printf("\nInserted word %s [%d]",
+               info->word.c_str(), info->frequency);
+      } else {
+        // Cannot insert least frequency word
+        printf("\nCannot insert less frequent word %s [%d] (Root: %d)",
+               info->word.c_str(), info->frequency, root_frequency);
+        retval = false;
+      }
+    } else {
+      // Simply insert heap nodes (build min heap later)
+      MIN_HEAP[heap_usage] = info;
+      heap_usage ++;
+      retval = true;
+    }
+    return retval;
+  }
+
+  // Display all heap nodes (level order)
+  void DisplayMinHeap() {
+    printf("\nMinHeap");
+    for(int index = 0; index < heap_usage; index++) {
+      DisplayWordInfo(MIN_HEAP[index]);
+    }
+  }
+
+  // Create word info
+  NODE* CreateWordInfo(const string word) {
+    NODE* info = (NODE*) malloc(sizeof(NODE));
+    info->word      = word;
+    info->frequency = 1;
+    return info;
+  }
+
+  // Delete word info
+  void DeleteWordInfo(NODE* info) {
+    free(info);
+    info = NULL;
+  }
+
+  // Display word info
+  void DisplayWordInfo(NODE* info) {
+    printf("\n%s -> %d", info->word.c_str(), info->frequency);
+  }
+
+  // Read file and intialize hash map with word frequencies
+  bool ReadFile(const string file) {
+    bool retval = false;
+    word_file.open(file);
+    if(word_file.is_open()) {
+      string key_word;
+      while(word_file >> key_word) {
+        // Check whether word is visited before
+        if(HASH_MAP.find(key_word) == HASH_MAP.end()) {
+          // For newly visited word, add new word to hashmap
+          NODE* val_info = CreateWordInfo(key_word);
+          HASH_MAP[key_word] = val_info;
+        } else {
+          // For re-visited word, update frequency of word
+          NODE* val_info = HASH_MAP[key_word];
+          val_info->frequency ++;
+        }
+      }
+      word_file.close();
+      retval = true;
+    }
+    return retval;
+  }
+
+  // Find K frequent words
+  void FindKFrequentWords(int count) {
+    // Iterate over all words
+    for(auto itr : HASH_MAP) {
+      // Insert word into min-heap
+      // This ensures only most frequent words remain in heap
+      InsertWordInfo(itr.second);
+    }
+    DisplayMinHeap();
+    // Traverse min-heap in reverse to get most frequent words
+    printf("\n%d most frequent words are: ", count);
+    int index = heap_usage - 1;
+    while((index >=0) & (count > 0)) {
+      DisplayWordInfo(MIN_HEAP[index]);
+      index --;
+      count --;
+    }
+  }
+
+  // Erase hash map
+  void DeleteWordMap() {
+    for(auto itr : HASH_MAP) {
+      //printf("\nDeleting %s", itr.first.c_str());
+      DeleteWordInfo(itr.second);
+    }
+  }
+
+  // Display hash map
+  void DisplayWordMap() {
+    printf("\nWord Frequency Map");
+    for(auto itr : HASH_MAP) {
+      DisplayWordInfo(itr.second);
+    }
+  }
+
+  // Destructor
+  ~WordFile() {
+    // Free dynamically allocated array of pointers
+    free(MIN_HEAP);
+    MIN_HEAP = NULL;
+  }
+};
+
+
 
 class MaxHeap {
 private:
@@ -133,6 +372,8 @@ public:
   }
 
 };
+
+
 
 int main(){
   int arr[] = {1, 3, 5, 6, 10, 8};
