@@ -11,6 +11,12 @@ using namespace std;
 #define SHOW_BOOL(x)   ((x)?"T":"F")
 int lookup[MAX_SIZE];
 
+/*
+Links to Check:
+https://www.geeksforgeeks.org/maximum-size-rectangle-binary-sub-matrix-1s/
+https://www.geeksforgeeks.org/largest-sum-contiguous-subarray/
+*/
+
 // Helper for qSort Comparator
 int comparator(const void* a, const void *b) {
   return (*(int*)a - *(int*)b);
