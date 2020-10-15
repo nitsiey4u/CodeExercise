@@ -398,16 +398,72 @@ void recursive_reverse(NODE* curr, NODE* prev, NODE* &headRef) {
   }
 }
 
+// Display circular linked list
+void display_circular_list(NODE* head, NODE* tail) {
+  printf("\nCircular List: ");
+  if(head && tail) {
+    for(NODE* ptr = head; ptr != tail; ptr = ptr->next) {
+      printf(" %d --> ", ptr->value);
+    }
+    printf(" %d", tail->value);
+  }
+}
+
+// Reverse circular linked list
+void reverse_circular_list(NODE* & head, NODE* & tail) {
+  if((head != NULL) && (head != tail)) {
+    NODE* prev = head;
+    NODE* curr = prev->next;
+    NODE* next = (curr != tail) ? curr->next : NULL;
+    prev->next = tail;
+    tail = prev;
+    while(curr && next && (curr != head) && (next != head)) {
+      curr->next = prev;
+      prev = curr;
+      curr = next;
+      next = next->next;
+    } // End of while loop
+    curr->next = prev;
+    head = curr;
+  } // End of if block
+}
+
+// Delete circular linked list
+void delete_circular_list(NODE* & head, NODE* & tail) {
+  if(head && tail) {
+    NODE *ptr, *prev;
+    for(ptr = head, prev = NULL; ptr != tail; prev = ptr, ptr = ptr->next) {
+      if(prev != NULL) {
+        printf("\nFreeing %d", prev->value);
+        free(prev);
+        prev = NULL;
+      }
+    }
+    // Delete 2nd last element
+    if(prev) {
+      printf("\nFreeing %d", prev->value);
+      free(prev);
+      prev = NULL;
+    }
+    // Delete last element
+    if(tail) {
+      printf("\nFreeing %d", tail->value);
+      free(tail);
+      tail = NULL;
+    }
+    head = NULL;
+  }
+}
+
 int main() {
   int arr[] = {1, 2};
   int size = sizeof(arr)/sizeof(arr[0]);
   NODE* head = array_to_list(arr, size);
-  display_list(head);
 
-  recursive_reverse(head, NULL, head);
-  display_list(head);
-
-  delete_list(head);
+  // recursive_reverse(head, NULL, head);
+  // display_list(head);
+  //
+  // delete_list(head);
 
   // head = reverse_sublist_group(head, 1);
   // display_list(head);
@@ -445,5 +501,14 @@ int main() {
   // head = middle_alternate_merge(head);
   // display_list(head);
   // delete_list(head);
+
+  // NODE* tail = get_last_node(head);
+  // tail->next = head;
+  // display_circular_list(head, tail);
+  // reverse_circular_list(head, tail);
+  // display_circular_list(head, tail);
+  // delete_circular_list(head, tail);
+
+  delete_list(head);
   return 0;
 }
