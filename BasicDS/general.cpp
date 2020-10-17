@@ -9,6 +9,7 @@
 #include <cmath>
 #include <unordered_set>
 #include <queue>
+#include <string>
 
 using namespace std;
 
@@ -630,6 +631,103 @@ void jumping_numbers(const int maxval) {
       counter --;
     } // End of inner while loop
   } // End of outer for loop
+}
+
+// Processing command line arguments
+int cmdline_arguments(int argc, char* argv[]) {
+  int min_args = 4;
+  int max_args = 6;
+  string str_prog(argv[0]);
+  string msg_help = str_prog + " hostname=<HOST>" +
+                    " username=<USER>" + " password=<PASSWORD>" +
+                    " [set-field [ get-field ] ]\n";
+  if((argc < min_args) || (argc > max_args)) {
+    printf("\nInvalid number of arguments.");
+    printf("\nUsage: %s", msg_help.c_str());
+    return -1;
+  }
+
+  // Parse arguments
+  string hostname = "";
+  string username = "";
+  string password = "";
+  bool is_set = false;
+  bool is_get = false;
+  for(int index = 1; index < argc; index++) {
+    string param(argv[index]);
+    if(param.find("hostname=") == 0) {
+      size_t position = param.find("=");
+      hostname = param.substr(position + 1);
+    }
+    else if(param.find("username=") == 0) {
+      size_t position = param.find("=");
+      username = param.substr(position + 1);
+    }
+    else if(param.find("password=") == 0) {
+      size_t position = param.find("=");
+      password = param.substr(position + 1);
+    }
+    else if(param.compare("set-field") == 0) {
+      is_set = true;
+    }
+    else if(param.compare("get-field") == 0) {
+      is_get = true;
+    }
+    else {
+      printf("\nUsage: %s", msg_help.c_str());
+      return -1;
+    }
+  }
+  // Check mandatory arguments
+  if((hostname.length() == 0) ||
+     (username.length() == 0) ||
+     (password.length() == 0)) {
+     printf("\nMissing mandatory argument(s).");
+     printf("\nUsage: %s", msg_help.c_str());
+     return -1;
+  }
+  // Check optional arguments
+  if((is_set == false) && (is_get == true)) {
+    printf("\nPassed optional argument(s) not in specific order.");
+    printf("\nUsage: %s", msg_help.c_str());
+    return -1;
+  }
+
+  // Parsed arguments
+  printf("\nHostname: %s", hostname.c_str());
+  printf("\nUsername: %s", username.c_str());
+  printf("\nPassword: %s", password.c_str());
+  printf("\nSet-Field: %s", show_bool(is_set));
+  printf("\nGet-Field: %s", show_bool(is_get));
+  return 0;
+}
+
+// Remove duplicate from sorted array (in-place) - O(N)
+int remove_duplicates(int arr[], int size) {
+ int high = size - 1;		// Last element of array
+ int prev = 0;					// Position available to insert distinct element
+ int next = 0;					// Pointer to last occurence of repetitive element
+ // Iterate array upto second last element
+ for(int index = 0; index < high; index++) {
+	 // Check if current element is same as next elemet
+   if(arr[index] == arr[index + 1]) {
+		 // Next points to next repetitive element
+     next = index + 1;
+   } else {
+		 // Swap last repetitive element with distinc element position
+     swap(&arr[next], &arr[prev]);
+		 // Increment pointer to elements
+     prev++;
+     next++;
+   }
+ }
+ // For last element check if its processed and swap accordingly
+ if((next > prev) && (next < size) && (arr[next] != arr[prev])) {
+   swap(&arr[next], &arr[prev]);
+   prev++;
+ }
+ // Return size of reduced array
+ return (prev == 0) ? 1 : prev;
 }
 
 int main(int argc, char* argv[]) {

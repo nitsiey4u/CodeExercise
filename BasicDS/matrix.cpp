@@ -1,8 +1,11 @@
 /***********************************************/
 /********   Matrix Related Problems   **********/
 /***********************************************/
-#include "stdio.h"
-#include "stdlib.h"
+#include <cstdio>
+#include <cstdlib>
+#include <algorithm>
+
+#define MAX(a,b) ((a > b)?(a):(b))
 
 // Matrix for range queries
 #define RNG_ROWS 3
@@ -26,6 +29,7 @@
 
 //  Maximum dircetions for matrix traversal
 #define MAX_DIRS 4
+#define MAX_NGBR 8
 
 // Position in matrix (row, col)
 struct Position {
@@ -455,9 +459,9 @@ int mat2[TBL_ROWS][TBL_COLS] = {
 int bin[BIN_ROWS][BIN_COLS] = {
   {1, 1, 0, 0, 0},
   {0, 1, 0, 0, 1},
-  {1, 0, 0, 1, 1},
-  {0, 0, 0, 0, 0},
-  {1, 0, 1, 0, 1}
+  {1, 1, 1, 1, 1},
+  {0, 0, 0, 1, 0},
+  {1, 0, 1, 1, 1}
 };
 
 int clr[CLR_ROWS][CLR_COLS] = {
@@ -537,11 +541,103 @@ void allocate_3darray(int blocks, int rows, int cols) {
   free(array);
 }
 
+// Visit array elements
+int visit_elements(int bin[BIN_ROWS][BIN_COLS], int row, int col) {
+    static int row_vals[MAX_NGBR] = { 0,  0, +1, +1, +1, -1, -1, -1};
+    static int col_vals[MAX_NGBR] = {+1, -1, -1,  0, +1, -1,  0, +1};
+    int counter = 0;
+    if(((row >= 0) && (row < BIN_ROWS)) &&
+       ((col >= 0) && (col < BIN_COLS)) &&
+       (bin[row][col] == 1)) {
+      counter = 1;
+      bin[row][col] = 0;
+      for(int index = 0; index < MAX_NGBR; index++) {
+        int row_index = row + row_vals[index];
+        int col_index = col + col_vals[index];
+        counter += visit_elements(bin, row_index, col_index);
+      }
+    }
+    return counter;
+}
+
+
+// Get largest region size of connected 1's - O(MN)
+void largest_region_size(int bin[BIN_ROWS][BIN_COLS]) {
+  int region = 0;
+  for(int row = 0; row < BIN_ROWS; row++) {
+    for(int col = 0; col < BIN_COLS; col++) {
+      if(bin[row][col] == 1) {
+        int retval = visit_elements(bin, row, col);
+        region = (retval > region) ? retval : region;
+      }
+    }
+  }
+  printf("\nMax Region: %d", region);
+}
+
+// Find longest connected 1's - O(N2)
+// Consider only forward direction (Right and Down)
+void longest_connected_ones(int bin[BIN_ROWS][BIN_COLS]) {
+  int region = 0;
+  int max_row = 0;
+  int max_col = 0;
+  for(int row = 0; row < BIN_ROWS; row++) {
+    for(int col = 0; col < BIN_COLS; col++) {
+      // Check if element is part of grid-1
+      if(bin[row][col] == 1) {
+        // Get value of above (TOP) element
+        int row_val = (row == 0) ? 0 : bin[row - 1][col];
+        // Get value of previous (LEFT) element
+        int col_val = (col == 0) ? 0 : bin[row][col - 1];
+        // Use previous max and add current 1
+        bin[row][col] = MAX(row_val, col_val) + 1;
+        // Update max region and indices
+        if(bin[row][col] > region) {
+          region = bin[row][col];
+          max_row = row;
+          max_col = col;
+        }
+      } else {
+        // Set value as 0
+        bin[row][col] = 0;
+      }
+    } // Inner loop
+  } // Outer loop
+
+  // Backtrack to initialize result array
+  const int length = region;
+  int pre_row = max_row;
+  int pre_col = max_col;
+  int result[BIN_ROWS][BIN_COLS] = {0};
+  for(int row = max_row; (region > 0) && (row >= 0); row--) {
+    for(int col = max_col; (region > 0) && (col >= 0); col--) {
+      if((bin[row][col] == region) &&
+         (row <= pre_row) && (col <= pre_col)) {
+        result[row][col] = 1;
+        pre_row = row;
+        pre_col = col;
+        region --;
+      }
+    }
+  }
+
+  // Display longest path
+  printf("\nLongest connected path (%d) of 1's: ", length);
+  for(int row = 0; row < BIN_ROWS; row++) {
+    printf("\n");
+    for(int col = 0; col < BIN_COLS; col++) {
+      printf("\t%d", result[row][col]);
+    }
+  }
+}
+
 // Main driver function
 int main(int argc, char* argv[]) {
   // display_paint(clr);
   // paint_function(clr, 4, 4, 2);
   // display_paint(clr);
   // execute_rectangle_sum();
+
+  longest_connected_ones(bin);
   return 0;
 }
