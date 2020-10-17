@@ -54,7 +54,7 @@ int fib_memoization(int number) {
 }
 
 // Find longest sequence of increasing numbers - O(N2)
-void longest_increasing_subsubsequence(int arr[], int size) {
+void longest_increasing_subsequence(int arr[], int size) {
   int max_length = 1;
   int max_index  = 0;
   int sub_length[size];
@@ -120,7 +120,7 @@ void longest_increasing_subsubsequence(int arr[], int size) {
 }
 
 // Helper display subsequence matrix
-void display_subsequence_matrix(string source, string target, int** matrix) {
+void display_string_matrix(string source, string target, int** matrix) {
   int source_length = source.length() + 1; // For 0th column
   int target_length = target.length() + 1; // For 0th row
   printf("\nSubsequence Matrix:\n\t");
@@ -147,7 +147,7 @@ void display_subsequence_matrix(string source, string target, int** matrix) {
 }
 
 // Find Longest Common Sub-sequence (LCS) of two strings - O(MN)
-void longest_common_subsubsequence(string source, string target) {
+void longest_common_subsequence(string source, string target) {
   int source_length = source.length() + 1; // For 0th column
   int target_length = target.length() + 1; // For 0th row
 
@@ -181,7 +181,7 @@ void longest_common_subsubsequence(string source, string target) {
   }
 
   // Display subsequence length matrix
-  // display_subsequence_matrix(source, target, sublen_matrix);
+  // display_string_matrix(source, target, sublen_matrix);
 
   // Traverse bottom up for longest common subsequence
   int row = target_length - 1;
@@ -217,6 +217,169 @@ void longest_common_subsubsequence(string source, string target) {
     free(sublen_matrix[index]);
   }
   free(sublen_matrix);
+}
+
+// Minimum Edit Distance to edit source to target - O(MN)
+void minimum_edit_distance(string source, string target) {
+  int source_length = source.length() + 1;  // For Row - 0 (Null Char)
+  int target_length = target.length() + 1;  // For Col - 0 (Null Char)
+  // Allocate distance matrix
+  int** distance_matrix = (int**)malloc(sizeof(int*) * source_length);
+  for(int index = 0; index < source_length; index++) {
+    distance_matrix[index] = (int*)malloc(sizeof(int) * target_length);
+  }
+  // Initialize distance matrix
+  for(int row = 0; row < source_length; row++) {
+    for(int col = 0; col < target_length; col++) {
+      if(row == 0) {
+        // To edit from NULL source to target char (by inserting target)
+        // Moving Right -> Insert Operation
+        distance_matrix[row][col] = col;
+      } else if(col == 0) {
+        // To edit from source char to NULL target (by removing source)
+        // Moving Down ! Delete Operation
+        distance_matrix[row][col] = row;
+      } else {
+        distance_matrix[row][col] = 0;
+      }
+    }
+  }
+  // Iterate over distance matrix
+  for(int row = 1; row < source_length; row++) {
+    for(int col = 1; col < target_length; col++) {
+      int source_index = row - 1; // Set source string index
+      int target_index = col - 1; // Set target string index
+      if(source[source_index] == target[target_index]) {
+        // Source = Target, copy value from diagonal (without adding cost)
+        distance_matrix[row][col] = distance_matrix[row - 1][col - 1];
+      } // End of if
+      else {
+        // Copy previous column (LEFT) element value
+        int insert = distance_matrix[row][col - 1];
+        // Copy previous row (ABOVE) element value
+        int remove = distance_matrix[row - 1][col];
+        // Copy previous row,col (DIAGONAL) element value
+        int replace = distance_matrix[row - 1][col - 1];
+        // Source != Target, get min from neighbours (left, diagnoal, above)
+        int minval = min(insert, remove);
+        // Get min value with diagonal element and add 1 transition cost
+        distance_matrix[row][col] = min(minval,replace) + 1;
+      } //  End of else
+    } // End of inner for loop (target)
+  } // End of outer for loop (source)
+
+  // Display distance matrix
+  display_string_matrix(target, source, distance_matrix);
+  printf("\nSource: %s", source.c_str());
+  printf("\nTarget: %s", target.c_str());
+
+  // Backtracking to display result
+  int row = source_length - 1;
+  int col = target_length - 1;
+  printf("\nMinimum edit distance: %d", distance_matrix[row][col]);
+  while((row > 0) && (col > 0)) {
+    int source_index = row - 1; // Set source string index
+    int target_index = col - 1; // Set target string index
+    if(source[source_index] == target[target_index]) {
+      // The current value is coming from diagonal
+      row = row - 1;
+      col = col - 1;
+    } else {
+      int val = distance_matrix[row][col] - 1;
+      if(val == distance_matrix[row - 1][col - 1]) {
+        // The current value is coming from diagonal (replacement)
+        row = row - 1;
+        col = col - 1;
+        printf("\nSource '%c' should be replaced by Target '%c'",
+                source[source_index], target[target_index]);
+      } else if (val == distance_matrix[row][col - 1]) {
+        // The current value is coming from previous (insertion)
+        col = col - 1;
+        printf("\nTarget '%c' should be inserted", target[target_index]);
+      } else {
+        // The current value is coming from above (deletion)
+        row = row - 1;
+        printf("\nSource '%c' should be removed", source[source_index]);
+      }
+    }
+  } // End of while loop
+
+  // Handle remaining indices
+  if((row == 0) && (col > 0)) {
+    // Target needs to be inserted
+    printf("\nTarget '%c' should be inserted", target[col - 1]);
+  } else if((col == 0) && (row > 0)) {
+    // Source needs to be deleted
+    printf("\nSource '%c' should be removed", source[row - 1]);
+  } else {
+    // Processing completed do nothing
+  }
+
+  // Deallocate distance matrix
+  for(int index = 0; index < source_length; index++) {
+    free(distance_matrix[index]);
+  }
+  free(distance_matrix);
+}
+
+// Find length of longest palindromic subsequence - O(N2)
+int longest_palindromic_subsequence(string str, int low, int high, int** seq) {
+  // 1-character is palindrome
+  if((low == high) || (seq[low][high] != -1)) {
+    return seq[low][high];
+  }
+
+  if((str[low] == str[high]) && ((low + 1) == high)) {
+      // 2-character palindrome for matching first and last chars
+    seq[low][high] = 2;
+  } else if(str[low] == str[high]) {
+    // N-character palindrome for matching first and last chars
+    seq[low][high] = 2 + longest_palindromic_subsequence(str, low + 1, high - 1, seq);
+  } else {
+    // Recurse to find another palindrome
+    seq[low][high] = max(longest_palindromic_subsequence(str, low + 1, high, seq),
+                         longest_palindromic_subsequence(str, low, high - 1, seq));
+  }
+  return seq[low][high];
+}
+
+// Reverse input string - O(N)
+void reverse_string(string & str) {
+  int length = str.length() - 1;
+  for(int index = 0; index < (length/2); index++) {
+    swap(str[index], str[length - index]);
+  }
+}
+
+// Find longest palindromic subsequence - O(N2)
+void palindromic_subsequence(string str) {
+  int length = str.length();
+  // Allocate DP matrix
+  int** seq = (int**) malloc(sizeof(int*) * length);
+  for(int index = 0; index < length; index++) {
+    seq[index] = (int*) malloc(sizeof(int) * length);
+  }
+  // Initialize DP matrix
+  for(int row = 0; row < length; row++) {
+    for(int col = 0; col < length; col++) {
+      seq[row][col] = (row == col) ? 1 : -1;
+    }
+  }
+  // Get length of longest palindromic subsequence
+  int val = longest_palindromic_subsequence(str, 0, (str.length() - 1), seq);
+  printf("\nLength: %d", val);
+  // Deallocate DP matrix
+  for(int index = 0; index < length; index++) {
+    free(seq[index]);
+  }
+  free(seq);
+
+  // Get longest palindromic subsequence
+  string source = str;    // Original string
+  string target = str;    // Reversed string
+  reverse_string(target);
+  // Find LCS to get palindomic subsequence - O(N2)
+  longest_common_subsequence(source, target);
 }
 
 // Helper for displaying subset sum matrix
@@ -340,6 +503,119 @@ void find_subset_sum(int arr[], const int size, const int total) {
   free(sum);
 }
 
+struct KnapSack{
+  int value;
+  int weight;
+};
+typedef struct KnapSack KNAPSACK;
+
+// Find subset of items with sum weights < knapsack weight with max value
+//  Time complexity - O(NW) N: Number of items, W: Weight of Knapsack
+int knapsack_maximum(KNAPSACK snap[], int values[], int indices[],
+                     int size, int weight) {
+  // Very important - as size of array is +1 than actual index
+  int index = size - 1;
+
+  // All weight is either used up or no items remaining
+  if((weight == 0)||(index < 0)) {
+    return 0;
+  }
+
+  // Check if max val is already calculated
+  if(values[index] != -1) {
+    // Negative value used as lowest value is 0
+    return values[index];
+  }
+
+  // Check if current item > weight
+  if(snap[index].weight > weight) {
+    // Exclude this item (as its heavier)
+    // Save maximum value for next iteration
+    values[index] = knapsack_maximum(snap, values, indices, (size - 1), weight);
+    indices[index] = indices[index - 1];
+  } else {
+    // Include this item (as its ligher), value can be low/high
+    int inwgt = weight - snap[index].weight;
+    int inval = snap[index].value +
+                knapsack_maximum(snap, values, indices, (size - 1), inwgt);
+
+    // Exclude this item (as its ligher), value can be low/high
+    int exval = knapsack_maximum(snap, values, indices, (size - 1), weight);
+
+    // Save maximum value for next iteration
+    if(inval > exval) {
+      values[index]  = inval;
+      indices[index] = index;
+    } else {
+      values[index]  = exval;
+      indices[index] = indices[index - 1];
+    }
+  }
+  return values[index];
+}
+
+// Remove duplicate from array (in-place) - O(N)
+int remove_duplicates(int arr[], int size) {
+ int prev = 0;
+ int next = 0;
+ for(int index = 0; index < (size - 1); index++) {
+   if(arr[index] == arr[index + 1]) {
+     next = index + 1;
+   } else {
+     swap(arr[next], arr[prev]);
+     prev++;
+     next++;
+   }
+ }
+ if((next > prev) && (next < size) && (arr[next] != arr[prev])) {
+   swap(arr[next], arr[prev]);
+   prev++;
+ }
+ return (prev == 0) ? 1 : prev;
+}
+
+// Driver program for knapsack problem
+void knapsack_driver(int arrWeights[], int arrValues[], int size, int weight) {
+  KNAPSACK snap[size];
+  int values[size];
+  int indices[size];
+  // Init arrays
+  for(int index = 0; index < size; index++) {
+    snap[index].weight = arrWeights[index];
+    snap[index].value  = arrValues[index];
+    values[index]  = -1;
+    indices[index] = -1;
+  }
+  // Get maximum subset value
+  int maxval = knapsack_maximum(snap, values, indices, size, weight);
+  printf("\nKnapsack Maximum: %d", maxval);
+  // Remove repetitive items from indices - O(N)
+  int maxidx = remove_duplicates(indices, size);
+  int maxwgt = weight;
+  // Display subset items (reverse way)
+  for(int index = (maxidx - 1); index >= 0; index--) {
+    if(maxwgt >= 0) {
+      int item = indices[index];
+      printf("\nItem: %d (Value: %d, Weight: %d)",
+             item, snap[item].value, snap[item].weight);
+      maxwgt = maxwgt - snap[item].weight;
+    }
+  } // End of for loop
+}
+
+// Time complexity - O(NM)  N: Number of steps M: Max steps at time
+int staircase_steps(int* steps, const int number, const int maxopt) {
+  if(number <= 1) {
+    return ((number == 0)||(number == 1)) ? steps[number] : 0;
+  }
+  if(steps[number] == 0) {
+    for(int index = 1; index <= maxopt; index++) {
+      steps[number] += staircase_steps(steps, (number - index), maxopt);
+    }
+  }
+  return steps[number];
+}
+
 int main() {
   // memset(lookup, -1, sizeof(lookup));
   // lookup[0] = 0;
@@ -351,14 +627,42 @@ int main() {
   // int arr[] = {0, 4, 12, 2, 10, 6, 9, 13, 3, 11, 7, 15};
   // int arr[] = {50, 3, 10, 7, 40, 80};
   // int size = sizeof(arr)/sizeof(int);
-  // longest_increasing_subsubsequence(arr, size);
+  // longest_increasing_subsequence(arr, size);
 
-  // longest_common_subsubsequence("bqdrcvefgh", "abcvdefgh");
-  // longest_common_subsubsequence("ABCDGH","AEDFHR");
+  // longest_common_subsequence("bqdrcvefgh", "abcvdefgh");
+  // longest_common_subsequence("ABCDGH","AEDFHR");
+
+  // minimum_edit_distance("adceg", "abcfg");
 
   // int arr[] = {3, 8, 4, 12, 5, 2};
   // int arr[] = {3, 34, 4, 12, 5, 2, 1, 1};
   // int size = sizeof(arr)/sizeof(arr[0]);
   // find_subset_sum(arr, size, 11);
+
+  // int number = 7;
+  // int maxopt = 3;
+  // int* steps = (int*) malloc((sizeof(int) * (number + 1)));
+  // for(int index = 0; index <= number; index++) {
+  //   steps[index] = (index <= 1) ? 1 : 0;
+  // }
+  // int ways = staircase_steps(steps, number, maxopt);
+  // printf("\nWays to reach %dth step (max %d): %d", number, maxopt, ways);
+  // free(steps);
+  //
+
+
+  // int seq[length];
+  // for(int index = 0; index < length; index++) {
+  //   seq[index] = 0;
+  // }
+  // int val = longest_palindrome_length(str, 0, str.length() - 1, seq);
+  // printf("\nLength: %d", val);
+  //
+  // for(int index = 0; index < length; index++) {
+  //   printf("\n[%d]: %d", index, seq[index]);
+  // }
+
+  // palindromic_subsequence("GEEKSFORGEEKS");
+
   return 0;
 }

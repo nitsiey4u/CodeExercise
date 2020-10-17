@@ -1,6 +1,7 @@
-#include "stdio.h"
-#include "stdlib.h"
-#include "stdbool.h"
+#include <cstdio>
+#include <cstdlib>
+#include <cstdbool>
+#include <algorithm>
 
 #define BOOL(val)  ((val) ? "True" : "False")
 
@@ -452,6 +453,34 @@ void ordered_neighbours(int* arr, const int size, const int kval){
 	// Answer: Absolutely NO,
 	// Any element can be local maxima in left half not neighbour of K
 	// Any element can be local maxima in right half not neighbour of K
+}
+
+// Remove duplicate from sorted array (in-place) - O(N)
+int remove_duplicates(int arr[], int size) {
+ int high = size - 1;		// Last element of array
+ int prev = 0;					// Position available to insert distinct element
+ int next = 0;					// Pointer to last occurence of repetitive element
+ // Iterate array upto second last element
+ for(int index = 0; index < high; index++) {
+	 // Check if current element is same as next elemet
+   if(arr[index] == arr[index + 1]) {
+		 // Next points to next repetitive element
+     next = index + 1;
+   } else {
+		 // Swap last repetitive element with distinc element position
+     swap_values(&arr[next], &arr[prev]);
+		 // Increment pointer to elements
+     prev++;
+     next++;
+   }
+ }
+ // For last element check if its processed and swap accordingly
+ if((next > prev) && (next < size) && (arr[next] != arr[prev])) {
+   swap_values(&arr[next], &arr[prev]);
+   prev++;
+ }
+ // Return size of reduced array
+ return (prev == 0) ? 1 : prev;
 }
 
 // Main driver function
