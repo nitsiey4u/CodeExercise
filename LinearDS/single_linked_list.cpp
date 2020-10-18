@@ -1,5 +1,8 @@
-#include "stdio.h"
-#include "stdlib.h"
+#include <cstdio>
+#include <cstdlib>
+
+#define MAX(x,y) ((x>y)?(x):(y))
+#define BOOL(x)  ((x)?"True":"False")
 
 struct Node {
   int value;
@@ -14,6 +17,15 @@ NODE* create_node(const int value) {
   ptr->value = value;
   ptr->next = NULL;
   return ptr;
+}
+
+// Display Node
+void display_node(const char* hdr, NODE* ptr) {
+  if(ptr != NULL) {
+    printf("\n%s: %d", hdr, ptr->value);
+  } else {
+    printf("\n%s: NULL", hdr);
+  }
 }
 
 // Display linked list
@@ -39,6 +51,24 @@ void delete_list(NODE* head) {
     free(prev);
     prev = NULL;
   }
+}
+
+
+// Create list of zero nodes of specific count
+NODE* zero_nodes_list(const int maxcount) {
+  NODE* result = NULL;
+  NODE* valptr = NULL;
+  for(int index = 0; index < maxcount; index++) {
+    NODE* temp = create_node(0);
+    if(result == NULL) {
+      valptr = temp;
+      result = valptr;
+    } else {
+      valptr->next = temp;
+      valptr = valptr->next;
+    }
+  }
+  return result;
 }
 
 // Insert node to end of linked list
@@ -212,54 +242,79 @@ NODE* middle_alternate_merge(NODE* head) {
 }
 
 // Merge two sorted linked lists into one
-NODE* merge_sort_lists(NODE* head1, NODE* head2) {
-  NODE* ptr1 = head1;
-  NODE* ptr2 = head2;
-  NODE* main = NULL;
-  if(ptr1 && ptr2) {
-    main = (ptr1->value <= ptr2->value) ? ptr1 : ptr2;
-  } else {
-    main = (ptr1) ? ptr1 : ptr2;
-  }
+NODE* merge_sorted_lists(NODE* head1, NODE* head2) {
+  NODE* result = NULL;
+  NODE* ptr    = NULL;
+  NODE* ptr1   = head1;
+  NODE* ptr2   = head2;
+
   while(ptr1 && ptr2) {
-    NODE* temp1 = ptr1->next;
-    NODE* temp2 = ptr2->next;
+    NODE* temp = NULL;
+    // Get node with smallest value
     if(ptr1->value < ptr2->value) {
-      // since ptr1 is smaller (consume it)
-      // ptr1->next = smaller value between ptr2 and temp1
-      if(temp1 && temp1->value <= ptr2->value) {
-        ptr1->next = temp1;
-      } else {
-        ptr1->next = ptr2;
-      }
-      // cosumed ptr1 so increment to next
-      ptr1 = temp1;
-    }
-    else if(ptr1->value > ptr2->value) {
-      // since ptr2 is smaller (consume it)
-      // ptr2->next = smaller value between ptr1 and temp2
-      if(temp2 && temp2->value < ptr1->value) {
-        ptr2->next = temp2;
-      } else {
-        ptr2->next = ptr1;
-      }
-      // cosumed ptr2 so increment to next
-      ptr2 = temp2;
+      temp = ptr1;
+      ptr1 = ptr1->next;
     } else {
-      printf("\nPTR matching %d %d", ptr1->value, ptr2->value);
-      // consume ptr1 and ptr2
-      ptr1->next = ptr2;
-      if(temp1 && temp2 && (temp1->value <= temp2->value)) {
-        ptr2->next = temp1;
-      } else {
-        ptr2->next = temp2;
-      }
-      // cosumed ptr1 and ptr2 so increment to next
-      ptr1 = temp1;
-      ptr2 = temp2;
+      temp = ptr2;
+      ptr2 = ptr2->next;
+    }
+    // Save smallest node into result
+    if(ptr == NULL) {
+      // Set new head
+      ptr = temp;
+      result = ptr;
+    } else {
+      // Move ptr to last merged node
+      ptr->next = temp;
+      ptr = ptr->next;
     }
   }
-  return main;
+  // Save remainder of ptr1
+  if(ptr1) {
+    ptr->next = ptr1;
+  }
+  // Save remainder of ptr2
+  if(ptr2) {
+    ptr->next = ptr2;
+  }
+  // Return merged list
+  return result;
+}
+
+NODE* combine_sort_lists(NODE* & ptr1, NODE* & ptr2) {
+  NODE* result = NULL;
+  if(ptr1 == NULL) {
+    return ptr2;
+  } else if (ptr2 == NULL) {
+    return ptr1;
+  }
+  if(ptr1->value < ptr2->value) {
+    result = ptr1;
+    result->next = combine_sort_lists(ptr1->next, ptr2);
+  } else {
+    result = ptr2;
+    result->next = combine_sort_lists(ptr1, ptr2->next);
+  }
+  return result;
+}
+
+// Merge Sort linked list - O(NLogN)
+void merge_sort(NODE* & head) {
+  // If only 1 node exists
+  if((head == NULL) || (head->next == NULL)) {
+    return;
+  }
+  // Get middle node and split into 2 sub-lists
+  NODE* mid = get_middle_node(head);
+  NODE* ptr1 = head;
+  NODE* ptr2 = mid->next;
+  mid->next = NULL;
+  // Recursively merge sort sublist-1
+  merge_sort(ptr1);
+  // Recursively merge sort sublist-2
+  merge_sort(ptr2);
+  // Merge sublists into sorted sublist
+  head = combine_sort_lists(ptr1, ptr2);
 }
 
 // Reverse linked list
@@ -287,6 +342,46 @@ NODE* reverse_merge_list(NODE* head) {
   NODE* middle = get_middle_node(head);
   middle->next = reverse_linked_list(middle->next);
   return head;
+}
+
+// Break linked list and alternate merge reversed last-sublist
+NODE* middle_alternate_reverse_merge(NODE* head) {
+  NODE* middle = get_middle_node(head);
+  NODE* head1  = head;
+  NODE* head2  = middle->next;
+  middle->next = NULL;
+  head2 = reverse_linked_list(head2);
+  NODE* ptr1 = head1;
+  NODE* ptr2 = head2;
+  NODE* result = ptr1;
+  while(ptr1 && ptr2) {
+    NODE* next1 = ptr1->next;
+    NODE* next2 = ptr2->next;
+    ptr1->next = ptr2;
+    ptr2->next = next1;
+    ptr1 = next1;
+    ptr2 = next2;
+  }
+  return result;
+}
+
+// Check if linked list is palindrome
+bool is_palindrome(NODE* head) {
+  NODE* middle = get_middle_node(head);
+  NODE* head1 = head;
+  NODE* head2 = middle->next;
+  middle->next = NULL;
+  head2 = reverse_linked_list(head2);
+  bool flag  = true;
+  NODE* ptr1 = head1;
+  NODE* ptr2 = head2;
+  while((flag) && (ptr1 && ptr2)) {
+    flag = (ptr1->value == ptr2->value);
+    ptr1 = ptr1->next;
+    ptr2 = ptr2->next;
+  }
+  middle->next = reverse_linked_list(head2);
+  return flag;
 }
 
 // Find loop node in linked list
@@ -385,17 +480,50 @@ NODE* reverse_sublist_group(NODE* head, const int group) {
   return main;
 }
 
-// Recursively reverse linked list
-void recursive_reverse(NODE* curr, NODE* prev, NODE* &headRef) {
-  if(curr == NULL) {
-    // Reached end of linked list
-    headRef = prev;
-  } else {
-    // Recursively call over to next node
-    recursive_reverse(curr->next, curr, headRef);
-    // Assign current next to previous
-    curr->next = prev;
+// Reverse linked list in alternate groups of K
+NODE* reverse_alternate_sublist_group(NODE* head, const int group) {
+  NODE* lower = NULL;
+  NODE* upper = NULL;
+  NODE *prev, *next, *ptr, *itr;
+  int value = 1;
+  int index = 0;
+  int counter = group;
+
+  NODE dummy;
+  dummy.value = 0;
+  dummy.next = head;
+  for(ptr = head, itr = &dummy; ptr != NULL; itr = ptr, ptr = ptr->next) {
+    //printf("\nCounter: %d", counter);
+    if(counter == group) {
+      prev = itr;
+      lower = ptr;
+      value = -1;
+    } else if(counter == 0) {
+      value = +1;
+    } else if(counter == 1) {
+      if(lower) {
+        upper = ptr;
+        next = ptr->next;
+      }
+    }
+
+    if(lower && upper) {
+      printf("\nReverse: %d-%d", lower->value, upper->value);
+      display_node("Prev", prev);
+      display_node("Next", next);
+
+      upper->next = NULL;
+      prev->next = reverse_linked_list(lower);
+      lower->next = next;
+      ptr = lower;
+      prev = NULL;
+      next = NULL;
+      lower = NULL;
+      upper = NULL;
+    }
+    counter = counter + value;
   }
+  return dummy.next;
 }
 
 // Display circular linked list
@@ -455,11 +583,146 @@ void delete_circular_list(NODE* & head, NODE* & tail) {
   }
 }
 
-int main() {
-  int arr[] = {1, 2};
-  int size = sizeof(arr)/sizeof(arr[0]);
-  NODE* head = array_to_list(arr, size);
+// Recursively reverse linked list and return number of nodes
+int recursive_reverse(NODE* curr, NODE* prev, NODE* &headRef) {
+  int retval = 0;
+  if(curr == NULL) {
+    // Reached end of linked list
+    headRef = prev;
+  } else {
+    // Recursively call over to next node
+    retval = 1 + recursive_reverse(curr->next, curr, headRef);
+    // Assign current next to previous
+    curr->next = prev;
+  }
+  return retval;
+}
 
+// Multiple large numbers represented by linked list - O(N2)
+NODE* multiply_lists(NODE* & head1, NODE* & head2) {
+  // Reverse list with number 1
+  int m = recursive_reverse(head1, NULL, head1);
+  // Reverse list with number 2
+  int n = recursive_reverse(head2, NULL, head2);
+  // Max number of nodes in result
+  int maxcount = (m + n + 1);
+  // Create result list
+  NODE* result = zero_nodes_list(maxcount);
+  int count;
+  NODE *ptr1, *ptr2;
+  for(ptr1 = head2, count = 0; ptr1 != NULL; ptr1 = ptr1->next, count++) {
+    int carry = 0;
+    NODE* ptr = result;
+    int index = 0;
+    for(ptr2 = head1; ptr2 != NULL; ptr2 = ptr2->next) {
+      while(index < count) {
+        // Handle 10th position to skip result values
+        ptr = ptr->next;
+        index++;
+      }
+      // Multiply digits and add to previous result
+      int value = (ptr1->value * ptr2->value) + ptr->value + carry;
+      // Save lowest remainder
+      ptr->value = value % 10;
+      // Carry overflow value for next iteration
+      carry = value / 10;
+      // Move to next position of result
+      ptr = ptr->next;
+    } // Inner loop
+    // Handle remaining carry value
+    while(carry > 0) {
+      int value = carry % 10;
+      carry = carry / 10;
+      if(ptr != NULL) {
+        ptr->value = value;
+        ptr = ptr->next;
+      } else {
+        printf("\nNot available nodes");
+      }
+    }
+  } // Outer loop
+  // Reverse final result
+  result = reverse_linked_list(result);
+  // Remove prefixed buffer zeroes
+  NODE* ptr = result;
+  while((ptr != NULL) && (ptr->value == 0)) {
+    NODE* temp = ptr;
+    ptr = ptr->next;
+    result = ptr;
+    free(temp);
+  }
+  return result;
+}
+
+// Add large numbers represented by linked list - O(N)
+NODE* add_lists(NODE* & head1, NODE* & head2) {
+  // Reverse list with number 1
+  int count1 = recursive_reverse(head1, NULL, head1);
+  // Reverse list with number 2
+  int count2 = recursive_reverse(head2, NULL, head2);
+  // Max number of nodes in result
+  int maxcount = MAX(count1, count2) + 1;
+  // Max difference which needs to be adjusted
+  int difcount = abs(count1 - count2);
+  // Create result list
+  NODE* result = zero_nodes_list(maxcount);
+  // Create list to insert zeros
+  NODE* buffer = zero_nodes_list(difcount);
+  // Adjust zero to smaller number
+  if(count1 != count2) {
+    NODE* last = NULL;
+    if(count1 > count2) {
+      // Get last node for 2nd list
+      last = get_last_node(head2);
+    } else {
+      // Get last node for 1st list
+      last = get_last_node(head1);
+    }
+    // Zeroes appended at last
+    last->next = buffer;
+  }
+
+  NODE *ptr, *ptr1, *ptr2;
+  int carry = 0;
+  // Add digits for both numbers
+  for(ptr1 = head1, ptr2 = head2, ptr = result;
+      ptr1 && ptr2; ptr1 = ptr1->next, ptr2 = ptr2->next) {
+    int value = ptr1->value + ptr2->value + carry;
+    ptr->value = value % 10;
+    carry = value / 10;
+    ptr = ptr->next;
+  }
+  // Handle overflow carry
+  while(carry > 0) {
+    ptr->value = carry % 10;
+    carry = carry / 10;
+    ptr = ptr->next;
+  }
+  // Reverse final result
+  result = reverse_linked_list(result);
+  ptr = result;
+  // Remove prefixed buffer zeroes
+  while((ptr != NULL) && (ptr->value == 0)) {
+    NODE* temp = ptr;
+    ptr = ptr->next;
+    result = ptr;
+    free(temp);
+  }
+  return result;
+}
+
+int main() {
+  // int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
+  // int size = sizeof(arr)/sizeof(arr[0]);
+  // NODE* head = array_to_list(arr, size);
+  // display_list(head);
+  //head = middle_alternate_reverse_merge(head);
+  // printf("\nIs Palindrome: %s", BOOL(is_palindrome(head)));
+  // display_list(head);
+
+  // head = reverse_alternate_sublist_group(head, 2);
+
+  // display_list(head);
   // recursive_reverse(head, NULL, head);
   // display_list(head);
   //
@@ -489,7 +752,7 @@ int main() {
   // NODE* head2 = array_to_list(arr2, size2);
   // display_list(head2);
   //
-  // NODE* head = merge_sort_lists(head1, head2);
+  // NODE* head = merge_sorted_lists(head1, head2);
   // display_list(head);
   // delete_list(head);
 
@@ -509,6 +772,37 @@ int main() {
   // display_circular_list(head, tail);
   // delete_circular_list(head, tail);
 
-  delete_list(head);
+  // delete_list(head);
+
+  //
+  // int arr[] = {15, 10, 5, 20, 3, 2};
+  // int size = sizeof(arr)/sizeof(arr[0]);
+  // NODE* head = array_to_list(arr, size);
+  // display_list(head);
+  // merge_sort(head);
+  // display_list(head);
+  // delete_list(head);
+
+//  int arr1[] = {9, 4, 6};
+//  int arr2[] = {8, 4, 9};
+  // int arr1[] = {9, 9, 9};
+  // int size1 = sizeof(arr1)/sizeof(arr1[0]);
+  // NODE* head1 = array_to_list(arr1, size1);
+  // display_list(head1);
+  //
+  // int arr2[] = {9, 9, 9};
+  // int size2 = sizeof(arr2)/sizeof(arr2[0]);
+  // NODE* head2 = array_to_list(arr2, size2);
+  // display_list(head2);
+  //
+  // NODE* result = multiply_lists(head1, head2);
+  // NODE* result = add_lists(head1, head2);
+  //
+  // display_list(result);
+  //
+  // delete_list(head1);
+  // delete_list(head2);
+  // delete_list(result);
+
   return 0;
 }

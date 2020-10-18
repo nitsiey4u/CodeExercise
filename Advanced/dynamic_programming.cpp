@@ -9,6 +9,7 @@ using namespace std;
 #define NIL_VALUE       -1
 #define MAX_SIZE        20
 #define SHOW_BOOL(x)   ((x)?"T":"F")
+#define MAX(x,y)       ((x>y)?(x):(y))
 int lookup[MAX_SIZE];
 
 /*
@@ -20,6 +21,18 @@ https://www.geeksforgeeks.org/largest-sum-contiguous-subarray/
 // Helper for qSort Comparator
 int comparator(const void* a, const void *b) {
   return (*(int*)a - *(int*)b);
+}
+
+// Helper to display array
+void display_array(int arr[], int size) {
+  printf("\nValue:");
+  for(int index = 0; index < size; index++) {
+    printf("\t%d", arr[index]);
+  }
+  printf("\nIndex:");
+  for(int index = 0; index < size; index++) {
+    printf("\t%d", index);
+  }
 }
 
 // Helper to display lookup table
@@ -604,8 +617,10 @@ void knapsack_driver(int arrWeights[], int arrValues[], int size, int weight) {
 }
 
 // Time complexity - O(NM)  N: Number of steps M: Max steps at time
+// F(N) = F(N-1) + F(N-2) + F(N-3) for M=3
 int staircase_steps(int* steps, const int number, const int maxopt) {
   if(number <= 1) {
+    // Initialized arr[0] = arr[1] = 1
     return ((number == 0)||(number == 1)) ? steps[number] : 0;
   }
   if(steps[number] == 0) {
@@ -614,6 +629,64 @@ int staircase_steps(int* steps, const int number, const int maxopt) {
     }
   }
   return steps[number];
+}
+
+// Recursive function for non-contiguous subarray max sum
+int contiguous_sum(int arr[], int sum[], int high, int index, int & maxval) {
+  if((0 <= index) && (index <= high)) {
+    if(sum[index] != 0) {
+      return sum[index];
+    }
+    if(high == 0) {
+      sum[index] = arr[0];
+    } else {
+      int prev_max = contiguous_sum(arr, sum, high, (index - 1), maxval);
+      sum[index] = max((prev_max + arr[index]), arr[index]);
+      maxval = max(maxval, sum[index]);
+    }
+    return sum[index];
+  }
+  return -1;
+}
+
+// Recursive function for non-contiguous subarray max sum
+int noncontiguous_sum(int arr[], int sum[], int high, int index) {
+  if((0 <= index) && (index <= high)) {
+    if(sum[index] != 0) {
+      return sum[index];
+    }
+    if(high == 0) {
+      sum[index] = arr[0];
+    } else if(high == 1) {
+      sum[index] = max(arr[0], arr[1]);
+    } else {
+      sum[index] = max(noncontiguous_sum(arr, sum, high, (index - 2)) + arr[index],
+                       noncontiguous_sum(arr, sum , high, (index - 1)));
+    }
+    return sum[index];
+  }
+  return 0;
+}
+
+// Get maximum sum of non-contiguous subarray - O(N)
+// Kadane's algorithm for subarray max sum
+void maxsum_subarray(int arr[], int size, bool contiguous) {
+  int sum[size];
+  for(int index = 0; index < size; index++) {
+    sum[index] = 0;
+  }
+  printf("\nInput Array: ");
+  display_array(arr, size);
+  if(contiguous) {
+    int maxsum = INT_MIN;
+    int maxval = contiguous_sum(arr, sum, size, (size - 1), maxsum);
+    printf("\nContiguous SubArray Max Sum: %d", maxsum);
+  } else {
+    int maxsum = noncontiguous_sum(arr, sum, size, (size - 1));
+    printf("\nNon-Contiguous SubArray Max Sum: %d", maxsum);
+  }
+  printf("\nMaxSum Array: ");
+  display_array(sum, size);
 }
 
 int main() {
@@ -650,7 +723,6 @@ int main() {
   // free(steps);
   //
 
-
   // int seq[length];
   // for(int index = 0; index < length; index++) {
   //   seq[index] = 0;
@@ -664,5 +736,16 @@ int main() {
 
   // palindromic_subsequence("GEEKSFORGEEKS");
 
+  // int arr[] = {-2, 1, 0, -3, 2, 4, 9, -1, -2, 1, 5, -3};
+  // int size = sizeof(arr)/sizeof(arr[0]);
+  // maxsum_subarray(arr, size, true);
+
+  // int arr[] = { -8, -3, -6, -2, -5, -4 };
+  // int size  = sizeof(arr)/sizeof(arr[0]);
+  // maxsum_subarray(arr, size, true);
+
+  // int arr[] = {1,2,3,8,10,1};
+  // int size = sizeof(arr)/sizeof(arr[0]);
+  // maxsum_subarray(arr, size, false);
   return 0;
 }
