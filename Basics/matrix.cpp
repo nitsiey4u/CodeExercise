@@ -21,15 +21,19 @@
 
 // Binary matrix for island counting - 8 neighbours
 #define BIN_ROWS 5    // Matrix 5 x 5
-#define BIN_COLS 5    // Matrix 5 x 5
+#define BIN_COLS 5
 
 // Color coded matrix for flood fill - 4 neighbours
 #define CLR_ROWS 8
 #define CLR_COLS 8
 
-//  Maximum dircetions for matrix traversal
+//  Maximum directions for matrix traversal
 #define MAX_DIRS 4
 #define MAX_NGBR 8
+
+// Connected components matrix for grid grouping - 4 neighbours
+#define GRID_ROWS 6    // Matrix 6 x 8
+#define GRID_COLS 8
 
 // Position in matrix (row, col)
 struct Position {
@@ -631,6 +635,86 @@ void longest_connected_ones(int bin[BIN_ROWS][BIN_COLS]) {
   }
 }
 
+// Grid matrix of connected components
+int grid[GRID_ROWS][GRID_COLS] = {
+  { 1, 4, 4, 4, 4, 3, 3, 1 },
+  { 2, 1, 1, 4, 3, 3, 1, 1 },
+  { 3, 2, 1, 1, 2, 3, 2, 1 },
+  { 3, 3, 2, 1, 2, 2, 2, 2 },
+  { 3, 1, 3, 1, 1, 4, 4, 4 },
+  { 1, 1, 3, 1, 1, 4, 4, 4 } };
+
+// Display Grid
+void display_grid(int arr[][GRID_COLS]) {
+  printf("\nGrid: ");
+  for(int row = 0; row < GRID_ROWS; row++) {
+    printf("\n");
+    for(int col = 0; col < GRID_COLS; col++) {
+      printf("\t%d", arr[row][col]);
+    }
+  }
+}
+
+// Recursively visit grid neighbours matching key (same group)
+int grid_neighbours(int arr[][GRID_COLS], int visit[][GRID_COLS],
+                    const int row, const int col,
+                    const int key, const int group) {
+    int counter = 0;
+    static int row_map[MAX_DIRS] = {-1, +1,  0,  0};
+    static int col_map[MAX_DIRS] = { 0,  0, -1, +1};
+    if((0 <= row) && (row < GRID_ROWS) &&
+       (0 <= col) && (col < GRID_COLS) &&
+       (visit[row][col] == 0) &&
+       (arr[row][col] == key)) {
+        counter = 1;
+        visit[row][col] = group;
+        for(int index = 0; index < MAX_DIRS; index++) {
+          counter += grid_neighbours(arr, visit,
+                                     (row + row_map[index]), (col + col_map[index]),
+                                     key, group);
+      } // For loop
+    } // If block
+    return counter;
+}
+
+// Find largest connected components - O(MN)
+void largest_connected_component(int arr[GRID_ROWS][GRID_COLS]) {
+  int visit[GRID_ROWS][GRID_COLS] = {0};
+  int group_num = 0;
+  int max_group = 0;
+  int max_value = 0;
+  for(int row = 0; row < GRID_ROWS; row++) {
+    for(int col = 0; col < GRID_COLS; col++) {
+      if(visit[row][col] == 0) {
+        // Assign new group number for un-visited key element
+        group_num++;
+        const int key = arr[row][col];
+        // Find grid neighbours for specific key element
+        int val = grid_neighbours(arr, visit, row, col, key, group_num);
+        // Save maximum group information
+        if(val > max_value) {
+          max_value = val;
+          max_group = group_num;
+        }
+      }
+    } // Inner Loop
+  } // Outer Loop
+  printf("\nMax Group Size: %d", max_value);
+  printf("\nMax Group Number: %d", max_group);
+
+  // Show grid with results
+  for(int row = 0; row < GRID_ROWS; row++) {
+    printf("\n");
+    for(int col = 0; col < GRID_COLS; col++) {
+      if(visit[row][col] == max_group) {
+        printf("\t%d", arr[row][col]);
+      } else {
+        printf("\t.");
+      }
+    }
+  }
+}
+
 // Main driver function
 int main(int argc, char* argv[]) {
   // display_paint(clr);
@@ -638,6 +722,9 @@ int main(int argc, char* argv[]) {
   // display_paint(clr);
   // execute_rectangle_sum();
 
-  longest_connected_ones(bin);
+  //longest_connected_ones(bin);
+  display_grid(grid);
+  largest_connected_component(grid);
+  // display_grid(grid);
   return 0;
 }

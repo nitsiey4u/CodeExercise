@@ -702,32 +702,52 @@ int cmdline_arguments(int argc, char* argv[]) {
   return 0;
 }
 
-// Remove duplicate from sorted array (in-place) - O(N)
+// Remove duplicates from sorted array (in-place) - O(N)
 int remove_duplicates(int arr[], int size) {
- int high = size - 1;		// Last element of array
- int prev = 0;					// Position available to insert distinct element
- int next = 0;					// Pointer to last occurence of repetitive element
- // Iterate array upto second last element
- for(int index = 0; index < high; index++) {
-	 // Check if current element is same as next elemet
-   if(arr[index] == arr[index + 1]) {
-		 // Next points to next repetitive element
-     next = index + 1;
-   } else {
-		 // Swap last repetitive element with distinc element position
-     swap(&arr[next], &arr[prev]);
-		 // Increment pointer to elements
-     prev++;
-     next++;
-   }
- }
- // For last element check if its processed and swap accordingly
- if((next > prev) && (next < size) && (arr[next] != arr[prev])) {
-   swap(&arr[next], &arr[prev]);
-   prev++;
- }
- // Return size of reduced array
- return (prev == 0) ? 1 : prev;
+  int prev = 0;
+  for(int index = 0; index < (size - 1); index++) {
+    if(arr[index] != arr[index + 1]) {
+      arr[prev] = arr[index];
+      prev++;
+    }
+  }
+  arr[prev] = arr[size - 1];
+  prev++;
+  return prev;
+}
+
+// Get maximum sum of contiguous subarray - O(N)
+// Kaden's algorithm - to handle negative value
+void maximum_subarray_sum(int arr[], int size) {
+  int lower = -1;
+  int upper = -1;
+  int cur_max = arr[0];    // Max of current element of array
+  int max_sum = arr[0];    // Total max of subarray
+  int start   = 0;
+  display_array("Input Array", arr, size);
+  for(int index = 1; index < size; index++) {
+    // Either current element is greater than max upto now
+    // or including this element the total max increases
+    cur_max = max(arr[index], arr[index] + cur_max);
+    if(cur_max >= max_sum) {
+      max_sum = cur_max;
+      lower = start;
+      upper = index;
+      printf("\nElement: %d\tLower: %d\t\tUpper: %d",
+                arr[index], lower, upper);
+    }
+    // Only for getting first positive higher number
+    if(cur_max < 0) {
+      // Current element is negative, no positive found till now
+      printf("\nStart: %d", (index + 1));
+      start = index + 1;
+    }
+  }
+  printf("\nMaximum sum of array: %d", max_sum);
+  printf("\nMax contiguous subarray of %d elements:", (upper - lower + 1));
+  for(int index = lower; index <= upper; index++) {
+    printf("\t%d", arr[index]);
+  }
 }
 
 int main(int argc, char* argv[]) {
@@ -785,6 +805,17 @@ int main(int argc, char* argv[]) {
   // maxmin_rearrange(arr, size);
   //
   // display_array("Display", arr, size);
-  jumping_numbers(100);
+  // jumping_numbers(100);
+
+  // int arr[] = { -2, 1, -3, 4, -1, 2, 1, -5, 4 };
+  int arr[] = { -8, -3, -6, -2, -5, -4 };
+  int size  = sizeof(arr)/sizeof(arr[0]);
+  maximum_subarray_sum(arr, size);
+
+  // int arr[]  = {1};
+  // int size   = sizeof(arr)/sizeof(arr[0]);
+  // display_array("Display", arr, size);
+  // int redlen = remove_duplicates(arr, size);
+  // display_array("Reduced", arr, redlen);
 	return 0;
 }
