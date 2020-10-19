@@ -750,6 +750,89 @@ void maximum_subarray_sum(int arr[], int size) {
   }
 }
 
+// Compare strings case insensitive
+bool compare_strings(string str1, string str2) {
+  if(str1.length() != str2.length()) {
+    return false;
+  }
+  if(str1 != str2) {
+    int i, j;
+    for(i = 0, j = 0; i < str1.length() && j < str2.length(); i++, j++) {
+      if(tolower(str1[i]) != tolower(str2[i])) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+// Convert 12 hour time format to 24 hour
+// Example: 7:05:45PM => 19:05:45
+// https://www.onlineconversion.com/date_12-24_hour.htm
+void format_time(string strtime) {
+  int hour_index = strtime.find(":");
+  if(hour_index == string::npos) {
+    printf("\nCould not find ':' for hour");
+    return;
+  }
+  int mins_index = strtime.find(":", hour_index + 1);
+  if(mins_index == string::npos) {
+    printf("\nCould not find ':' for mins");
+    return;
+  }
+  int secs_index = strtime.find_first_of("aApPMm", mins_index + 1);
+  if(secs_index == string::npos) {
+    printf("\nCould not find ':' for secs");
+    return;
+  }
+
+  string strhour = strtime.substr(0, hour_index);
+  string strmins = strtime.substr(hour_index + 1, (mins_index - hour_index - 1));
+  string strsecs = strtime.substr(mins_index + 1, (secs_index - mins_index - 1));
+  string strampm = strtime.substr(secs_index, strtime.length() - mins_index);
+
+  // From 1:00 PM to 11:59 PM you add 12 hours,
+  // From 12:00 AM (midnight) to 12:59 AM you subtract 12 hours.
+  if(compare_strings(strampm, "pm")) {
+    // 12:00 pm (Noon) to 11:59 pm => 12:00 to 23:59
+    int hours = stoi(strhour);
+    hours = (hours == 12) ? hours : (12 + hours);
+    strhour = to_string(hours);
+  } else if(compare_strings(strampm, "am")) {
+    // 12:00 am (Midnight) to 11:59 am => 00:00 to 11:59
+    int hours = stoi(strhour);
+    hours = (hours == 12) ? 0 : hours;
+    strhour = to_string(hours);
+  } else {
+    printf("\nInvalid string %s", strampm.c_str());
+    return;
+  }
+
+  // Prefix remainder zeroes
+  if(strhour.length() == 1) {
+    strhour = "0" + strhour;
+  }
+  if(strmins.length() == 1) {
+    strmins = "0" + strmins;
+  }
+  if(strsecs.length() == 1) {
+    strsecs = "0" + strsecs;
+  }
+
+  string result = strhour + ":" + strmins + ":" + strsecs;
+  printf("\nResult: %s", result.c_str());
+
+  // char strval[strtime.length() + 1];
+  // snprintf(strval, sizeof(strval), "%s", strtime.c_str());
+  // printf("\nTime: %s", strval);
+  // int count = 0;
+  // char* token = strtok(strval, ":");
+  // while(token != NULL) {
+  //   printf("\nVal: %s", token);
+  //   token = strtok(NULL, ":");
+  // }
+}
+
 int main(int argc, char* argv[]) {
 	// int arr[] = {1, 5, 7, -1, 5};
   // int size  = sizeof(arr)/sizeof(arr[0]);
@@ -808,14 +891,17 @@ int main(int argc, char* argv[]) {
   // jumping_numbers(100);
 
   // int arr[] = { -2, 1, -3, 4, -1, 2, 1, -5, 4 };
-  int arr[] = { -8, -3, -6, -2, -5, -4 };
-  int size  = sizeof(arr)/sizeof(arr[0]);
-  maximum_subarray_sum(arr, size);
+  // int arr[] = { -8, -3, -6, -2, -5, -4 };
+  // int size  = sizeof(arr)/sizeof(arr[0]);
+  // maximum_subarray_sum(arr, size);
 
   // int arr[]  = {1};
   // int size   = sizeof(arr)/sizeof(arr[0]);
   // display_array("Display", arr, size);
   // int redlen = remove_duplicates(arr, size);
   // display_array("Reduced", arr, redlen);
+  format_time("2:05:45AM");
+
+  //printf("\nEqual: %s", show_bool(compare_strings("aM", "Am")));
 	return 0;
 }

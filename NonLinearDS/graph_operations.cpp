@@ -2,6 +2,8 @@
 #include <list>
 #include <queue>
 
+#define BOOL(val)  ((val) ? "True" : "False")
+
 using namespace std;
 
 class Graph {
@@ -43,6 +45,9 @@ public:
   // Perform topological sort
   void topological_sort();
 
+  // Detect cycle
+  bool has_cycle();
+
 };
 
 // BFS Traversal - keep visited vertices in queue
@@ -71,7 +76,7 @@ void Graph::bfs_traversal(int source) {
   }
 }
 
-// Topological sort
+// Topological sort - O(V+E)
 void Graph::topological_sort() {
   // Create indegree array for vertices
   int indegree[vertices];
@@ -120,6 +125,33 @@ void Graph::topological_sort() {
   }
 }
 
+// Detect cycle - O(V+E)
+bool Graph::has_cycle() {
+  queue<int> QUEUE;
+  int visited[vertices + 1];
+  for(int index = 0; index <= vertices; index++) {
+    visited[index] = -1;
+  }
+
+  int source = floor(vertices/2);
+  visited[source]++;
+  QUEUE.push(source);
+  while(!QUEUE.empty()) {
+    int vertex = QUEUE.front();
+    QUEUE.pop();
+    for(auto itr = adjlist[vertex].begin(); itr != adjlist[vertex].end(); itr++) {
+      int adjacent = *itr;
+      if(adjacent == 0) {
+        printf("\nCycle exists");
+        return true;
+      }
+      visited[adjacent]++;
+      QUEUE.push(adjacent);
+    }
+  }
+  return false;
+}
+
 int main() {
   Graph graph(6);
   graph.add_edge(5, 2);
@@ -128,11 +160,12 @@ int main() {
   graph.add_edge(4, 1);
   graph.add_edge(2, 3);
   graph.add_edge(3, 1);
-  // // Break topological sort
-  // graph.add_edge(1, 0);
-  // graph.add_edge(0, 1);
+  // Break topological sort
+  graph.add_edge(1, 0);
+  graph.add_edge(0, 1);
   graph.show_graph();
-  graph.topological_sort();
-  //graph.bfs_traversal(5);
+  // graph.topological_sort();
+  // graph.bfs_traversal(5);
+  printf("\nHas Cycle: %s", BOOL(graph.has_cycle()));
   return 0;
 }
