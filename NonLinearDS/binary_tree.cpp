@@ -1,9 +1,10 @@
-#include "stdio.h"
-#include "stdlib.h"
+#include <cstdio>
+#include <cstdlib>
 #include <stack>
 #include <list>
 #include <queue>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 #define MAX(X,Y) ((X>Y)?(X):(Y))
@@ -230,6 +231,46 @@ void level_order_traversal(BTREE* root) {
   }
   printf("\nTotal Levels: %d, Nodes: %d, Internal: %d, Leaves: %d",
             level, counter, internal, leaves);
+}
+
+// Zigzag Level order traversal
+void zigzag_level_traversal(BTREE* root) {
+  stack<BTREE*> STACK_CURR;
+  stack<BTREE*> STACK_NEXT;
+  bool is_leftright = true;
+  STACK_CURR.push(root);
+  printf("\nZigzag order: ");
+  while(!STACK_CURR.empty()) {
+    // Pop items (current stack)
+    BTREE* ptr = STACK_CURR.top();
+    STACK_CURR.pop();
+    if(ptr != NULL) {
+      printf("\t%c", ptr->data);
+      if(is_leftright) {
+        // Push child left to right (next stack)
+        if(ptr->left) {
+          STACK_NEXT.push(ptr->left);
+        }
+        if(ptr->right) {
+          STACK_NEXT.push(ptr->right);
+        }
+      } else {
+        // Push child right to left (next stack)
+        if(ptr->right) {
+          STACK_NEXT.push(ptr->right);
+        }
+        if(ptr->left) {
+          STACK_NEXT.push(ptr->left);
+        }
+      }
+    }
+    // Once current stack is empty swap with next stack
+    if(STACK_CURR.empty()) {
+      // Indicates end of level
+      is_leftright = !is_leftright;
+      swap(STACK_CURR, STACK_NEXT);
+    }
+  } // While loop
 }
 
 // Create binary tree from input array
@@ -799,6 +840,8 @@ int main() {
   BTREE* node3 = search_key(root, 'G');
   node3->left = create_node('Z');
   print_tree(root, 0);
+
+  zigzag_level_traversal(root);
 
   // printf("\nPreorder Main:\t");
   // preorder_traversal(root);

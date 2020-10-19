@@ -1,9 +1,10 @@
 #include <iostream>
+#include <string>
 #include <queue>
 #include <stack>
 #include <vector>
 #include <list>
-#include <string>
+#include <set>
 #include <unordered_map>
 
 using namespace std;
@@ -40,8 +41,6 @@ void print_unordered_map(M map) {
     cout << "\t" << itr->first() << "<-->" << itr->second();
   }
 }
-
-
 
 struct range {
   int low;
@@ -216,5 +215,55 @@ int main(int argc, char* argv[]) {
     cout << "\n" << itr.first << "<---->" << itr.second;
   }
   cout << "\nKeyval: " << umap["Nitin"];
+
+
+  cout << "\n------- SET Operations ---------\n";
+  set<int> set1;
+  set<int> set2;
+  for(int index = 1; index <= 10; index++) {
+    set1.insert(index);
+    if(index % 2 == 0) {
+      set2.insert(index);
+    }
+  }
+  printf("\nSet1: ");
+  for(auto itr = set1.begin(); itr != set1.end(); ++itr) {
+    int item = *itr;
+    printf("\t%d", item);
+  }
+  printf("\nSet2: ");
+  for(auto itr = set2.begin(); itr != set2.end(); ++itr) {
+    int item = *itr;
+    printf("\t%d", item);
+  }
+  // includes, equals are std specific
+  if(includes(set1.begin(), set1.end(), set2.begin(), set2.end())) {
+    printf("\nIs Set");
+  }
+
+  cout << "\n------- MAX Heap ---------\n";
+  priority_queue<int> MAX_HEAP;
+  MAX_HEAP.push(3);
+  MAX_HEAP.push(10);
+  MAX_HEAP.push(2);
+  MAX_HEAP.push(12);
+  MAX_HEAP.push(1);
+  MAX_HEAP.push(4);
+  printf("\nMax Element: %d", MAX_HEAP.top());
+  MAX_HEAP.pop();
+  printf("\nMax Element: %d", MAX_HEAP.top());
+
+  // std::greater gives larger value
+  priority_queue <int, vector<int>, greater<int>> MIN_HEAP;
+  MIN_HEAP.push(3);
+  MIN_HEAP.push(10);
+  MIN_HEAP.push(2);
+  MIN_HEAP.push(12);
+  MIN_HEAP.push(1);
+  MIN_HEAP.push(4);
+  printf("\nMin Element: %d", MIN_HEAP.top());
+  MIN_HEAP.pop();
+  printf("\nMin Element: %d", MIN_HEAP.top());
+
   return 0;
 }
