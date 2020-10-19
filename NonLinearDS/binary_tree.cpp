@@ -4,7 +4,9 @@
 #include <list>
 #include <queue>
 #include <vector>
+#include <set>
 #include <algorithm>
+
 using namespace std;
 
 #define MAX(X,Y) ((X>Y)?(X):(Y))
@@ -667,13 +669,13 @@ void left_subtree(BTREE* root) {
   if(root != NULL) {
     // Print parent before traversing subtrees
     if(root->left != NULL) {
-      // If only left subtree exists, recurse further
+      // If only left subtree exists, print before recurse further
       printf("\t%c", root->data);
       left_subtree(root->left);
     } else if(root->right != NULL) {
-      // If only right subtree exists, recurse further
+      // If only right subtree exists, print before recurse further
       printf("\t%c", root->data);
-      left_subtree(root->left);
+      left_subtree(root->right);
     } else {
       // Do nothing for leaf nodes
       return;
@@ -686,11 +688,11 @@ void right_subtree(BTREE* root) {
   if(root != NULL) {
     // Print parent after traversing subtrees
     if(root->right != NULL) {
-      // If only right subtree exists, recurse further
+      // If only right subtree exists, print after recurse out
       right_subtree(root->right);
       printf("\t%c", root->data);
     } else if(root->left != NULL) {
-    // If only left subtree exists, recurse further
+    // If only left subtree exists, print after recurse out
       right_subtree(root->left);
       printf("\t%c", root->data);
     } else {
@@ -821,6 +823,71 @@ BTREE* deserialize_file(FILE* fp) {
   return root;
 }
 
+// Get ancestors of specific target and save all nodes into vector
+bool get_ancestors(BTREE* root, BTREE*& target, vector<BTREE*>& ancestors) {
+  if(root != NULL) {
+    // Insert parent irrespective of whether target exists or not
+    ancestors.push_back(root);
+    // Key node found
+    if(root == target) {
+      return true;
+    }
+    // Check if target is found in either of subtrees
+    if(get_ancestors(root->left, target, ancestors) ||
+       get_ancestors(root->right, target, ancestors)) {
+      return true;
+    }
+    // Remove parent because no subtrees contain target
+    ancestors.pop_back();
+  }
+  return false;
+}
+
+// Get downward children at distance K from root node - O(K)
+void get_Kdistance_childs(BTREE* root, const int K, set<char> & result) {
+  if((root != NULL) && (K >= 0)){
+    if(K == 0) {
+      // Set used as multiple insertions for same value is idempotent
+      result.insert(root->data);
+    }
+    get_Kdistance_childs(root->left, (K - 1), result);
+    get_Kdistance_childs(root->right, (K - 1), result);
+  }
+}
+
+// Get nodes at distance K from target - O(N)
+void get_Kdistance_nodes(BTREE* root, BTREE* target, const int K) {
+  // Get all ancestors upto target and save it in vector
+  vector<BTREE*> ancestors;
+  bool found = get_ancestors(root, target, ancestors);
+  if(found == false) {
+    printf("\nTarget not found");
+    return;
+  }
+
+  int count = K;      // Decrement K at every iteration
+  set<char> result;   // Nodes at distance K from target
+  // Resultant vector (as depicted below)
+  // Forefathers -> GrandParent -> Parent -> Current (Target)
+  // Traverse vector in reverse way and decrement K value
+  for(auto itr = ancestors.rbegin(); (count >= 0) && (itr != ancestors.rend()); itr++) {
+    BTREE* node = *itr;
+    // Find nodes at distance K from Current (Target)
+    // Find nodes at distance K-1 from Parent
+    // Find nodes at distance K-2 from GrandParent ...
+    // At distance 0 we get ancestor at distance K from Current (Target)
+    get_Kdistance_childs(node, count, result);
+    count --;
+  }
+  // Remove target node from the result
+  result.erase(target->data);
+  // Display all nodes at distance K from target
+  printf("\n%d distance nodes from %c: ", K, target->data);
+  for(auto itr: result) {
+    printf("\t%c", itr);
+  }
+}
+
 int main() {
   char arr[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'};
   int size   = sizeof(arr)/sizeof(arr[0]);
@@ -841,7 +908,11 @@ int main() {
   node3->left = create_node('Z');
   print_tree(root, 0);
 
-  zigzag_level_traversal(root);
+  BTREE* target = search_key(root, 'E');
+  get_Kdistance_nodes(root, target, 2);
+
+  // boundary_recursive(root);
+  // zigzag_level_traversal(root);
 
   // printf("\nPreorder Main:\t");
   // preorder_traversal(root);

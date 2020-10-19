@@ -5,9 +5,14 @@
 #include <vector>
 #include <list>
 #include <set>
+#include <algorithm>
 #include <unordered_map>
 
 using namespace std;
+
+bool is_digit(char c) {
+    return isdigit(c);
+}
 
 template <typename Q>
 void print_queue(Q que) {
@@ -226,6 +231,7 @@ int main(int argc, char* argv[]) {
       set2.insert(index);
     }
   }
+
   printf("\nSet1: ");
   for(auto itr = set1.begin(); itr != set1.end(); ++itr) {
     int item = *itr;
@@ -265,5 +271,9 @@ int main(int argc, char* argv[]) {
   MIN_HEAP.pop();
   printf("\nMin Element: %d", MIN_HEAP.top());
 
+  string str("1234");
+  int val = std::count_if(str.begin(), str.end(), is_digit);
+
+  printf("\nVal: %d", val);
   return 0;
 }
