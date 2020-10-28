@@ -144,6 +144,87 @@ bool is_subnetmask(const short number) {
   return is_powerOf2(value);
 }
 
+// Check if any 2 adjancent bits are set - O(1)
+bool is_adjacent_2set(const int number) {
+  return number & (number >> 1);
+}
+
+// Check if any 3 adjancent bits are set - O(1)
+bool is_adjacent_3set(const int number) {
+  return number & (number >> 1) & (number >> 2);
+}
+
+// Check if bits are set in increasing order - O(N)
+bool increasing_bitmask(const int number) {
+ int value = number;
+ int prev_count = MAX_BITS;
+ int curr_count = 0;
+ // Count set bits in decreasing order from right to left
+ while(value > 0) {
+   // If rightmost bit is not set, simply move to next bit
+   while((value > 0) && !(value & 1)) {
+     // Right shift by 1 bit position
+     value = value >> 1;
+   }
+   // If rightmost bit is set, start counting continous 1's
+   while((value > 0) && (value & 1)) {
+     // Right shift by 1 bit position
+     value = value >> 1;
+     // Counts set bit of continous 1's
+     curr_count++;
+   }
+   // Ideally we expect curr_count < prev_count
+   if(curr_count >= prev_count) {
+     printf("\nPrev: %d Curr: %d", prev_count, curr_count);
+     return false;
+   }
+   // Reset prev_count and curr_count for next iteration
+   printf("\nCount: %d", curr_count);
+   prev_count = curr_count;
+   curr_count = 0;
+ }
+ // All set bits are in decreasing order from right to left
+ return true;
+}
+
+// Find group with continous set bits (ranged mask bits) - O(N)
+void bitmask_groups(const int number) {
+  printf("\nBitmask groups for %d:", number);
+  int lower = MAX_BITS;
+  int upper = MAX_BITS;
+  bool group = true;
+  int value = number;
+  while(value > 0) {
+    // Find rightmost set bit position (converted to 0 based value)
+    int position  = rightmost_set_bit(value) - 1;
+    // Check difference between previous and current position
+    if((position - upper) == 1) {
+      // For consecutive positions reset upper bound
+      upper = position;
+    } else {
+      // For non-consecutive positions reset lower and upper bounds
+      if(position >= upper) {
+        // Print previous group range
+        printf("\nGroup %d-%d", lower, upper);
+      }
+      // Reset range for next group
+      lower = position;
+      upper = position;
+    }
+    // printf("\nPosition: %d (%d-%d)", position, lower, upper);
+
+    // Reset right visited 1 to 0 for next iteration
+    // The left unvisited 1 are kept as it is for next iteration
+    int bitmask = ~(1 << position);
+    value = value & bitmask;
+
+    // To display last group in case number runs to 0
+    if((value == 0) && (position >= upper)) {
+      printf("\nGroup %d-%d", lower, upper);
+    }
+  }
+}
+
 int main() {
   // show_binary(INT_MAX-255, SHOW_BIT);
   //show_binary(128, SHOW_BIT);
@@ -165,4 +246,14 @@ int main() {
   // show_binary(176, SHOW_BIT);
   // printf("\nVal: %u", swap_bits(176, 5, 1));
   // show_binary(146, SHOW_BIT);
+  // int value = 698;
+  // show_binary(value, SHOW_BIT);
+
+  // printf("\nIs Set: %s", BOOL_STR(is_adjacent_2set(3)));
+  // printf("\nIs Set: %s", BOOL_STR(is_adjacent_3set(698)));
+  // increasing_bitmask(value);
+  // printf("\nVal: %d", value);
+  // bitmask_groups(value);
+  // show_binary(183, SHOW_BIT);
+  bitmask_groups(183);
 }
