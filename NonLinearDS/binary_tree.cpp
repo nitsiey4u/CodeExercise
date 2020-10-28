@@ -858,6 +858,8 @@ void get_Kdistance_childs(BTREE* root, const int K, set<char> & result) {
 // Get nodes at distance K from target - O(N)
 void get_Kdistance_nodes(BTREE* root, BTREE* target, const int K) {
   // Get all ancestors upto target and save it in vector
+  // Resultant vector (as depicted below)
+  // Root -> Forefathers -> GrandParent -> Parent -> Current (Target)
   vector<BTREE*> ancestors;
   bool found = get_ancestors(root, target, ancestors);
   if(found == false) {
@@ -865,10 +867,10 @@ void get_Kdistance_nodes(BTREE* root, BTREE* target, const int K) {
     return;
   }
 
-  int count = K;      // Decrement K at every iteration
-  set<char> result;   // Nodes at distance K from target
-  // Resultant vector (as depicted below)
-  // Forefathers -> GrandParent -> Parent -> Current (Target)
+  // Define variables
+  int count = K;      // For decrementing K at every iteration
+  set<char> result;   // Result of values at distance K from target
+
   // Traverse vector in reverse way and decrement K value
   for(auto itr = ancestors.rbegin(); (count >= 0) && (itr != ancestors.rend()); itr++) {
     BTREE* node = *itr;
@@ -879,9 +881,11 @@ void get_Kdistance_nodes(BTREE* root, BTREE* target, const int K) {
     get_Kdistance_childs(node, count, result);
     count --;
   }
+
   // Remove target node from the result
   result.erase(target->data);
-  // Display all nodes at distance K from target
+
+  // Display nodes at distance K from target
   printf("\n%d distance nodes from %c: ", K, target->data);
   for(auto itr: result) {
     printf("\t%c", itr);

@@ -10,6 +10,8 @@
 #include <unordered_set>
 #include <queue>
 #include <string>
+#include <queue>
+#include <iostream>
 
 using namespace std;
 
@@ -23,6 +25,14 @@ using namespace std;
 typedef unsigned long long int  ullint_t;   // 8 bytes unsigned
 typedef long long int           llint_t;    // 8 bytes signed
 typedef unsigned int            uint_t;     // 4 bytes unsigned
+
+template <typename TLIST>
+void display_tlist(const char* header, TLIST TEMP) {
+  cout << "\n" << header << ":";
+  for(auto itr: TEMP) {
+    cout << "\t" << itr;
+  }
+}
 
 // Comparator
 int comparator(const void* a, const void *b) {
@@ -833,6 +843,29 @@ void format_time(string strtime) {
   // }
 }
 
+vector<int> sliding_window_maximum(vector<int> array, int window_size) {
+  vector<int> result;
+  deque<int> window;
+  window.push_back(0);
+  for(int index = 1; index < array.size(); index++) {
+    // If array element is greater than window value (back), pop smaller values from window
+    while((!window.empty()) && (array[window.back()] < array[index])) {
+      window.pop_back();
+    }
+    // Check if front is out of range
+    int range_index = index - window_size + 1;
+    while((!window.empty()) && (window.front() < range_index)) {
+      window.pop_front();
+    }
+    // If array element is smaller than window value (back), push value directly into window
+    window.push_back(index);
+    if((window_size - 1) <= index) {
+      result.push_back(array[window.front()]);
+    }
+  }
+  return result;
+}
+
 int main(int argc, char* argv[]) {
 	// int arr[] = {1, 5, 7, -1, 5};
   // int size  = sizeof(arr)/sizeof(arr[0]);
@@ -900,8 +933,12 @@ int main(int argc, char* argv[]) {
   // display_array("Display", arr, size);
   // int redlen = remove_duplicates(arr, size);
   // display_array("Reduced", arr, redlen);
-  format_time("2:05:45AM");
+  // format_time("2:05:45AM");
 
   //printf("\nEqual: %s", show_bool(compare_strings("aM", "Am")));
+
+  vector<int> array1 = {10, 6, 9, -3, 23, -1, 34, 56, 67, -1, -4, -8, -2, 9, 10, 34, 67};
+  auto result = sliding_window_maximum(array1, 3);
+  display_tlist("Result", result);
 	return 0;
 }
