@@ -32,9 +32,13 @@ void display_node(const char* hdr, NODE* ptr) {
 void display_list(NODE* head) {
   NODE *ptr = NULL;
   printf("\nList:");
-  for(ptr = head; ptr != NULL; ptr = ptr->next) {
-    const char* line = (ptr->next != NULL) ? "--->" : "";
-    printf(" %d %s", ptr->value, line);
+  if(head != NULL) {
+    for(ptr = head; ptr != NULL; ptr = ptr->next) {
+      const char* line = (ptr->next != NULL) ? "--->" : "";
+      printf(" %d %s", ptr->value, line);
+    }
+  } else {
+    printf(" NIL ");
   }
 }
 
@@ -711,6 +715,106 @@ NODE* add_lists(NODE* & head1, NODE* & head2) {
   return result;
 }
 
+// Display union and intersection of lists O(MlogM + NlogN + [M + N])
+void union_intersection_lists(NODE* head1, NODE* head2) {
+  NODE* union_head = NULL;
+  NODE* insct_head = NULL;
+  if((head1 != NULL) && (head2 != NULL)) {
+    // Merge sort list - O(MlogM)
+    merge_sort(head1);
+    // Merge sort list - O(NLogN)
+    merge_sort(head2);
+    // Init values
+    NODE* ptr1 = head1;
+    NODE* ptr2 = head2;
+    NODE* uptr = NULL;
+    NODE* iptr = NULL;
+    // Get union and intersection result for both lists O(M+N)
+    while(ptr1 && ptr2) {
+      NODE* temp = NULL;
+      // Compare values of both lists
+      if(ptr1->value == ptr2->value) {
+        // Intersection - Create copy of equal nodes
+        NODE* copy = create_node(ptr1->value);
+        if(insct_head == NULL) {
+          insct_head = copy;
+          iptr = insct_head;
+        } else {
+          iptr->next = copy;
+          iptr = iptr->next;
+        }
+        ptr1 = ptr1->next;
+        ptr2 = ptr2->next;
+
+        // Initialize temp node for union result
+        temp = create_node(copy->value);
+      } else {
+        // Union - Create copy of smaller nodes
+        if(ptr1->value < ptr2->value) {
+          temp = create_node(ptr1->value);
+          ptr1 = ptr1->next;
+        } else {
+          temp = create_node(ptr2->value);
+          ptr2 = ptr2->next;
+        }
+      }
+      // Every common and uncommon nodes are part of union result
+      if(union_head == NULL) {
+        union_head = temp;
+        uptr = union_head;
+      } else {
+        uptr->next = temp;
+        uptr = uptr->next;
+      }
+    } // While loop
+
+    // Add remaining nodes to union result
+    while(ptr1 != NULL) {
+      uptr->next = create_node(ptr1->value);
+      uptr = uptr->next;
+      ptr1 = ptr1->next;
+    }
+
+    // Add remaining nodes to union result
+    while(ptr2 != NULL) {
+      uptr->next = create_node(ptr2->value);
+      uptr = uptr->next;
+      ptr2 = ptr2->next;
+    }
+
+  } else {
+    // If any of the lists is empty
+    union_head = (head1 != NULL) ? head1 : head2;
+    insct_head = NULL;
+  }
+
+  // Display results
+  printf("\nUnion: ");
+  display_list(union_head);
+  printf("\nIntersection: ");
+  display_list(insct_head);
+
+  // Delete union and intersection lists
+  delete_list(union_head);
+  delete_list(insct_head);
+}
+
+// Merge lists with alternate nodes (in-place)
+void alternate_merge_lists(NODE* & head1, NODE* & head2) {
+  NODE* ptr1 = head1;
+  NODE* ptr2 = head2;
+  // Iterate over both lists
+  while(ptr1 && ptr2) {
+    NODE* next1 = ptr1->next;
+    NODE* next2 = ptr2->next;
+    ptr1->next = ptr2;
+    ptr2->next = next1;
+    ptr1 = next1;
+    ptr2 = next2;
+  }
+  head2 = ptr2;
+}
+
 int main() {
   // int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
   // int size = sizeof(arr)/sizeof(arr[0]);
@@ -803,6 +907,35 @@ int main() {
   // delete_list(head1);
   // delete_list(head2);
   // delete_list(result);
+
+  // int arr1[] = {10, 15, 4, 20};
+  // int size1 = sizeof(arr1)/sizeof(arr1[0]);
+  // NODE* head1 = array_to_list(arr1, size1);
+  // display_list(head1);
+  //
+  // int arr2[] = {8, 4, 2, 10};
+  // int size2 = sizeof(arr2)/sizeof(arr2[0]);
+  // NODE* head2 = array_to_list(arr2, size2);
+  // display_list(head2);
+  //
+  // union_intersection_lists(head1, head2);
+
+  int arr1[] = {1, 2, 3};
+  int size1 = sizeof(arr1)/sizeof(arr1[0]);
+  NODE* head1 = array_to_list(arr1, size1);
+  display_list(head1);
+
+  int arr2[] = {4, 5, 6, 7, 8};
+  int size2 = sizeof(arr2)/sizeof(arr2[0]);
+  NODE* head2 = array_to_list(arr2, size2);
+  display_list(head2);
+
+  alternate_merge_lists(head1, head2);
+  display_list(head1);
+  display_list(head2);
+
+  delete_list(head1);
+  delete_list(head2);
 
   return 0;
 }
