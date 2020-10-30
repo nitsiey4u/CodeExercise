@@ -454,34 +454,51 @@ NODE* reverse_sublist_range(NODE* head, const int m, const int n) {
 
 // Reverse linked list in groups of K
 NODE* reverse_sublist_group(NODE* head, const int group) {
-  NODE* main = NULL;
-  NODE* chain = NULL;
-  NODE* ptr = head;
-  NODE *start, *prev;
-  while (ptr != NULL) {
-    prev  = NULL;
-    start = ptr;
-    int count = group;
-    // Reverse group
-    while (ptr && (count > 0)) {
-      NODE* temp = ptr->next;
-      ptr->next = prev;
-      prev = ptr;
-      ptr = temp;
-      count --;
+  int index = 0;
+  NODE* ptr = NULL;
+  NODE* reversed  = NULL;   // Final result list
+  NODE* curr_head = NULL;   // Head of current sublist
+  NODE* curr_tail = NULL;   // Tail of current sublist
+  NODE* prev_tail = NULL;   // Tail of already processed result list
+  for(ptr = head, index = group; ptr != NULL; ptr = ptr->next, index --) {
+    if(index == group) {
+      // For K value, set sublist HEAD
+      curr_head = ptr;
+    } else if(index == 1) {
+      // For 1 value, set sublist TAIL
+      curr_tail = ptr;
+      index = group + 1;
+    } else {
+      // Continue for next iteration
+      continue;
     }
-    // Set new head
-    if(main == NULL) {
-      main = prev;
+    // Reverse sublist and chain results
+    if(curr_head && curr_tail) {
+      // Break sublist from original list
+      NODE* next = curr_tail->next;
+      curr_tail->next = NULL;
+      // Reverse sublist
+      NODE* temp = reverse_linked_list(curr_head);
+      if(reversed != NULL) {
+        // Append reversed sublist to result tail
+        prev_tail->next = temp;
+        prev_tail = curr_head;
+        prev_tail->next = next;
+        ptr = prev_tail;
+      } else {
+        // Set reversed sublist as result head
+        reversed  = temp;
+        prev_tail = curr_head;
+        prev_tail->next = next;
+        ptr = prev_tail;
+      }
+      // Reset sublist head and tail for next iteration
+      curr_head = NULL;
+      curr_tail = NULL;
     }
-    // Chain previous start to current previous (last)
-    if(chain != NULL) {
-      chain->next = prev;
-    }
-    // Reset chain to current start
-    chain = start;
   }
-  return main;
+  // Return final result
+  return reversed;
 }
 
 // Reverse linked list in alternate groups of K
@@ -492,7 +509,6 @@ NODE* reverse_alternate_sublist_group(NODE* head, const int group) {
   int value = 1;
   int index = 0;
   int counter = group;
-
   NODE dummy;
   dummy.value = 0;
   dummy.next = head;
@@ -512,10 +528,9 @@ NODE* reverse_alternate_sublist_group(NODE* head, const int group) {
     }
 
     if(lower && upper) {
-      printf("\nReverse: %d-%d", lower->value, upper->value);
-      display_node("Prev", prev);
-      display_node("Next", next);
-
+      // printf("\nReverse: %d-%d", lower->value, upper->value);
+      // display_node("Prev", prev);
+      // display_node("Next", next);
       upper->next = NULL;
       prev->next = reverse_linked_list(lower);
       lower->next = next;
@@ -920,22 +935,30 @@ int main() {
   //
   // union_intersection_lists(head1, head2);
 
-  int arr1[] = {1, 2, 3};
-  int size1 = sizeof(arr1)/sizeof(arr1[0]);
-  NODE* head1 = array_to_list(arr1, size1);
-  display_list(head1);
+  // int arr1[] = {1, 2, 3};
+  // int size1 = sizeof(arr1)/sizeof(arr1[0]);
+  // NODE* head1 = array_to_list(arr1, size1);
+  // display_list(head1);
+  //
+  // int arr2[] = {4, 5, 6, 7, 8};
+  // int size2 = sizeof(arr2)/sizeof(arr2[0]);
+  // NODE* head2 = array_to_list(arr2, size2);
+  // display_list(head2);
+  //
+  // alternate_merge_lists(head1, head2);
+  // display_list(head1);
+  // display_list(head2);
+  //
+  // delete_list(head1);
+  // delete_list(head2);
 
-  int arr2[] = {4, 5, 6, 7, 8};
-  int size2 = sizeof(arr2)/sizeof(arr2[0]);
-  NODE* head2 = array_to_list(arr2, size2);
-  display_list(head2);
-
-  alternate_merge_lists(head1, head2);
-  display_list(head1);
-  display_list(head2);
-
-  delete_list(head1);
-  delete_list(head2);
+  // int arr[] = {1, 2, 3, 4, 5, 6};
+  // int size = sizeof(arr)/sizeof(arr[0]);
+  // NODE* head = array_to_list(arr, size);
+  // display_list(head);
+  // head = reverse_sublist_group(head, 2);
+  // display_list(head);
+  // delete_list(head);
 
   return 0;
 }
