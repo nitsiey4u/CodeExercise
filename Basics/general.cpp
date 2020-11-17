@@ -21,10 +21,19 @@ using namespace std;
 #define MAX_CHAR_SIZE   80
 #define MAX_JUMP_SIZE   9
 #define show_bool(val)  ((val) ? "True" : "False")
+#define size_of(type)   ((char*)(&type + 1) - (char*)(&type))
 
 typedef unsigned long long int  ullint_t;   // 8 bytes unsigned
 typedef long long int           llint_t;    // 8 bytes signed
 typedef unsigned int            uint_t;     // 4 bytes unsigned
+
+// Bit Field Info Structure - word boundary (8 bytes)
+struct BitFieldInfo{
+  bool    bool_value : 1;   // 1-bit instead of 1 byte for bool
+  int     int_value  : 1;   // 1-bit instead of 4 bytes for signed int
+  int     long_value;       // 8 bytes for long int
+};
+typedef struct BitFieldInfo BITFIELD;
 
 template <typename TLIST>
 void display_tlist(const char* header, TLIST TEMP) {
@@ -591,6 +600,8 @@ void pythagoras_triplets(int arr[], int size) {
 }
 
 // Generate jumping numbers - O(K), K numbers smaller than MAX
+// 100 => 27
+// 2^(LogN - 1) * 10
 void jumping_numbers(const int maxval) {
   bool flag = true;
   printf("\n0");
@@ -866,6 +877,30 @@ vector<int> sliding_window_maximum(vector<int> array, int window_size) {
   return result;
 }
 
+int count_occurences(int arr[], int low, int high, int size, int target) {
+  int count = 0;
+  if(low <= high) {
+    if((arr[low] == target) && (arr[high] == target)) {
+      return high - low + 1;
+    }
+    int mid = low + (high - low) / 2;
+    if(arr[mid] == target) {
+      count = 1;
+      if((mid > 0) && (arr[mid - 1] == target)) {
+        count = count + count_occurences(arr, low, (mid - 1), size, target);
+      }
+      if((mid < size) && (arr[mid + 1] == target)) {
+        count = count + count_occurences(arr, (mid + 1), high, size, target);
+      }
+    } else if(arr[mid] < target) {
+      return count_occurences(arr, (mid + 1), high, size, target);
+    } else {
+      return count_occurences(arr, low, (mid - 1), size, target);
+    }
+  }
+  return count;
+}
+
 int main(int argc, char* argv[]) {
 	// int arr[] = {1, 5, 7, -1, 5};
   // int size  = sizeof(arr)/sizeof(arr[0]);
@@ -937,8 +972,19 @@ int main(int argc, char* argv[]) {
 
   //printf("\nEqual: %s", show_bool(compare_strings("aM", "Am")));
 
-  vector<int> array1 = {10, 6, 9, -3, 23, -1, 34, 56, 67, -1, -4, -8, -2, 9, 10, 34, 67};
-  auto result = sliding_window_maximum(array1, 3);
-  display_tlist("Result", result);
+  // vector<int> array1 = {10, 6, 9, -3, 23, -1, 34, 56, 67, -1, -4, -8, -2, 9, 10, 34, 67};
+  // auto result = sliding_window_maximum(array1, 3);
+  // display_tlist("Result", result);
+
+  // BITFIELD bit_field;
+  // printf("\nSize of Bit Field Structure: %lu", size_of(bit_field));
+  //printf("\n%f", log2(4));
+
+  //int arr[] = {1, 1, 1, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4};
+  int arr[] = {1, 2, 3, 4, 4};
+  int size  = sizeof(arr)/sizeof(arr[0]);
+  int count = count_occurences(arr, 0, (size - 1), size, 4);
+  printf("\nOccurences: %d", count);
+
 	return 0;
 }
