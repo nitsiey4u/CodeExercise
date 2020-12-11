@@ -1,5 +1,5 @@
 /**********************************************************
-  Bit Mask - Map Data Structure of N size bits
+  Bit Mask Info - Map Data Structure of N size bits
   Useful for storing bit information for indexed records
 ***********************************************************/
 

@@ -21,6 +21,14 @@ int comparator(const void* a, const void *b) {
   return (*(int*)a - *(int*)b);
 }
 
+// Utility to swap values
+void swap(int* left, int* right) {
+	//printf("\nSwapping %d <-> %d", *left, *right);
+	int temp = *right;
+	*right = *left;
+	*left = temp;
+}
+
 // Helper to display array
 void display_array(const char* title, int* arr, int size) {
 	int index;
@@ -322,6 +330,15 @@ int floor_maximum(int arr[], int low, int high, int target) {
   return retval;
 }
 
+// Given input array, rotate with specified count
+void rotate_input_array(int* arr, const int size, const int count) {
+  int max_limit = (size - count);
+  for(int curr_index = 0; curr_index < max_limit; curr_index++) {
+    int next_index = ((curr_index + count) % size);
+    swap(&arr[curr_index], &arr[next_index]);
+  }
+}
+
 // Is array sorted in ascending order - O(N)
 bool is_ascending(int* arr, const int low, const int high) {
   if(low <= high) {
@@ -513,16 +530,48 @@ bool is_rotated_sorted(int arr[], int size) {
   return false;
 }
 
+// Find rotational count of rotated sorted - O(LogN)
+// Main condition check:
+// Find smallest pivot element (index represents rotation count)
+int get_rotation_count(int arr[], int low, int high) {
+  if(low <= high) {
+    if(low == high) {
+      return low;
+    }
+    // Get current element (Ideally, left < current < right)
+    int mid = low + (high - low) / 2;
+
+    // Find smallest pivot element
+    if((low < mid) && (arr[mid] < arr[mid - 1])) {
+      // If current is smaller than left
+      return mid;
+    }
+    else if((mid < high) && (arr[mid + 1] < arr[mid])) {
+      // If right is smaller than current
+      return mid + 1;
+    }
+    else if(arr[high] < arr[mid]) {
+      // If high is smaller than current, recurse right half
+      return get_rotation_count(arr, (mid + 1), high);
+    }
+    else {
+      // If low is smaller than current, recurse left half
+      return get_rotation_count(arr, low, (mid - 1));
+    }
+  }
+  return 0;
+}
+
 // Main driver
 int main() {
   // int arr[] = {2, 1, 5, 7, -1, 5, 4};
   // int size  = sizeof(arr)/sizeof(arr[0]);
   // sum_pairs(arr, size, 6);
 
-  int arr[] = {0, 4, 45, 6, 10, 8};
-  int size  = sizeof(arr)/sizeof(arr[0]);
-  display_array("Display", arr, size);
-  sum_triplets(arr, size, 18);
+  // int arr[] = {0, 4, 45, 6, 10, 8};
+  // int size  = sizeof(arr)/sizeof(arr[0]);
+  // display_array("Display", arr, size);
+  // sum_triplets(arr, size, 18);
 
   // int arr[]  = {9, 6, 3, 4, 5, 7, 4};
   // int size   = sizeof(arr)/sizeof(arr[0]);
@@ -591,12 +640,9 @@ int main() {
   // printf("\nIndex: %d", rotated_search(arr, 0, (size - 1), 7));
 
   // int arr[] = {8, 9, 1, 2, 3, 4, 5, 6, 7};
-
   // int arr[] = {2, 3, 4, 5, 6, 7, 1};
-
   // int arr[] = {1, 4, 2, 3, 5};
   // int arr[] = {1, 2, 3, 4, 5, 6, 7};
-  // int arr[] = {3, 4, 6, 1, 2, 5};
 
   // int size  = sizeof(arr)/sizeof(arr[0]);
   // display_array("Array", arr, size);
@@ -607,5 +653,21 @@ int main() {
   //is_rotated_sorted(arr, size);
   // printf("\nIndex: %d", rotated_pivot(arr, 0, (size - 1)));
   // printf("\nRotated: %s", BOOL(is_rotated_sorted(arr, size)));
+
+  for(int count = 1; count < 3; count++) {
+    int arr[] = {1, 2, 3, 4, 5};
+    int size  = sizeof(arr)/sizeof(arr[0]);
+    printf("\nRotational Count: %d", count);
+    display_array("Sorted Array", arr, size);
+    rotate_input_array(arr, size, count);
+    display_array("Rotated Array", arr, size);
+  }
+
+  // int arr[] = {4, 5, 1, 2, 3};
+  // int size  = sizeof(arr)/sizeof(arr[0]);
+  // display_array("Array", arr, size);
+  // int count = get_rotation_count(arr, 0, (size - 1));
+  // printf("\nRotational Count: %d", count);
+
   return 0;
 }
