@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>Other Projects</title>
+    <link type="text/css" href="include/jquery-ui-1.8.7.custom.css" rel="stylesheet" />	
+    <link type="text/css" href="include/style.css" rel="stylesheet" />	
+    <script type="text/javascript" src="include/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="include/jquery-ui-1.8.7.custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen,print" href="OtherProjects_files/OtherProject.css" />
+    <script type="text/javascript">
+        $(function(){
+
+            // Accordion
+            $("#accordion").accordion({ header: "h3" });
+
+            // Tabs
+            $('#tabs').tabs();
+
+            // Dialog
+            $('#dialog').dialog({
+                autoOpen: false,
+                width: 600,
+                buttons: {
+                    "Ok": function() { 
+                        $(this).dialog("close"); 
+                    }, 
+                    "Cancel": function() { 
+                        $(this).dialog("close"); 
+                    } 
+                }
+            });
+            
+            // Dialog Link
+            $('#dialog_link').click(function(){
+                $('#dialog').dialog('open');
+                return false;
+            });
+
+            // Datepicker
+            $('#datepicker').datepicker({
+                inline: true
+            });
+            
+            // Slider
+            $('#slider').slider({
+                range: true,
+                values: [17, 67]
+            });
+            
+            // Progressbar
+            $("#progressbar").progressbar({
+                value: 20 
+            });
+            
+            //hover states on the static widgets
+            $('#dialog_link, ul#icons li').hover(
+                function() { $(this).addClass('ui-state-hover'); }, 
+                function() { $(this).removeClass('ui-state-hover'); }
+            );
+
+            $(".selector").accordion({clearStyle: true}); 
+        });
+
+        function loadfun()
+        {
+            activelink.style.color = "black";
+        }
+    </script>
+    <style type="text/css">
+    div.stmargin
+    {
+        margin-left:  50px;
+        width: 260px;
+    }
+    div.projcontent
+    {
+        font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+        font-size: 14px;
+        height: 300px;
+    }
+    ul
+    {
+        list-style-type: none;
+        list-style-image: none;
+    }
+
+    ul li
+    {
+       float: left;
+    }
+
+    #active
+    {
+        color: #000000;
+    }
+
+    ul a {
+            color: rgb(125, 131, 137);
+            font-family: 'Palatino-BoldItalic', 'Palatino', serif, bold;
+            font-size: 14px;
+            font-style: italic;
+            font-variant: normal;
+            font-weight: 700;
+            display: block;
+            line-height: 60px;
+            text-align: center;
+            text-decoration: none;
+            text-indent: 0px;
+            text-transform: uppercase;
+            padding-right: 12px;
+            padding-left: 12px;
+        }
+
+        a:active{color :#000000 }
+        a:hover{color :#000000 }
+
+    </style>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-20738656-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </head>
+  <body style="MARGIN: 0pt; BACKGROUND: url(OtherProjects_files/Cloth-3.jpg) rgb(255,255,255) left top" onload="loadfun();">
+    <div style="TEXT-ALIGN: center" >
+      <div style="POSITION: relative; TEXT-ALIGN: left; MARGIN: 15px auto; WIDTH: 700px; WORD-WRAP: break-word; OVERFLOW: hidden" id       ="body_content">
+        <div style="WIDTH: 700px; BACKGROUND: url(OtherProjects_files/page_tile_sidebar_fill2.jpg) left top"    >
+          <div style="Z-INDEX: 10; POSITION: relative; WIDTH: 700px; HEIGHT: 92px; MARGIN-LEFT: 0px" id ="header_layer">
+            <div style="LINE-HEIGHT: 0px; HEIGHT: 0px" class ="bumper"></div>
+            <div style="Z-INDEX: 1; POSITION: absolute;  WIDTH: 700px; HEIGHT: 26px; TOP: 0px; LEFT: 0px" class ="tinyText style_SkipStroke">
+              <img style="BORDER-BOTTOM: medium none; BORDER-LEFT: medium none; WIDTH: 700px; HEIGHT: 26px; BORDER-TOP: medium none; BORDER-RIGHT: medium none" alt="" src="OtherProjects_files/header.jpg" >
+            </div>
+            <div id="id1" style="Z-INDEX: 1; POSITION: absolute; WIDTH: 642px; HEIGHT: 59px; TOP: 33px; LEFT: 28px" class ="style_SkipStroke_1 shape-with-text">
+              <div class="text-content Normal_External_642_59" style="PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; PADDING-TOP: 0px">
+                <div class="Normal">
+                  <p style="PADDING-BOTTOM: 0pt; PADDING-TOP: 0pt" class ="paragraph_style">Other Projects</p>
+                  <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="Academics.html">Academics</a></li>
+                    <li><a href="Experience.html">Experience</a></li>
+                    <li><a href="LiveProjects.html">Live Projects</a></li>
+                    <li><a id="active" href="OtherProjects.html">Other Projects</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="Z-INDEX: 0; POSITION: relative; WIDTH: 28px; HEIGHT: 56px; MARGIN-LEFT: 0px" id="nav_layer">
+            <div style="LINE-HEIGHT: 0px; HEIGHT: 0px" class ="bumper"></div>
+            <div style="Z-INDEX: 1; POSITION: absolute;  WIDTH: 700px; HEIGHT: 450px; TOP: -450px; LEFT: 0px" class     ="tinyText style_SkipStroke">
+              <img style="BORDER-BOTTOM: medium none; BORDER-LEFT: medium none; WIDTH: 700px; HEIGHT: 500px; BORDER-TOP: medium none; BORDER-RIGHT: medium none" alt="" src="OtherProjects_files/flourish_purple_top.png" >
+            </div>
+            <div style="LINE-HEIGHT: 1px; HEIGHT: 1px" class ="tinyText"></div>
+            <div style="LINE-HEIGHT: 0px; HEIGHT: 0px; CLEAR: both" class ="spacer"></div>
+          </div>
+
+    <div style="Z-INDEX: 0; POSITION: absolute; TOP: 175px; WIDTH: 620px; MARGIN-LEFT: 40px" id="accordion">
+    <!-- Value 1 -->
+    <div>
+        <h3>
+            <a href="#">
+                &nbsp;&nbsp;&nbsp;RFC&nbsp;2616&nbsp;Compliant&nbsp;WebServer&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JAVA
+            </a>
+        </h3>
+        <div  class="projcontent">
+             <p  align="justify">
+            The project involved implementing a full-fledged RFC 2616 HTTP/1.1 web server in core Java, comparatively more powerful than Apache. The developed software provided features which includes PUT/POST/GET/Partial GET methods, easy reconfiguration & information logging, basic/digest authentication, redirection, access control, support for pipelining with parallel connections, content/transfer encoding, content negotiation. 
+             </p>
+        </div>
+    </div>
+
+    <!-- Value 2 -->
+    <div>
+        <h3>
+            <a href="#">
+                &nbsp;&nbsp;&nbsp;Distributed&nbsp;Secured&nbsp;MultiParty&nbsp;Computation&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JAVA
+            </a>
+        </h3>
+        <div  class="projcontent">
+             <p  align="justify">
+            The project involved implementing a distributed system consisting of different sites each maintaining a subset of data and collaborating with each other to produce results such as Secure Union, Secure Intersection without revealing which information belonged to which site.  For example Centers for Disease Control (CDC) may want to use data mining to identify trends and patterns in disease outbreaks, such as understanding and predicting the progression of a u epidemic. Insurance companies have considerable data that would be useful but are unwilling to disclose this due to patient privacy concerns. An alternative is to have each of the insurance companies provide some sort of statistics on their data that cannot be traced to individual patients, but can be used to identify the trends and patterns of interest to the CDC. The project implemented in JAVA supports different number of hosts with different database sizes and uses commutative encryption techniques for exchanging information and performing secure distributed multiparty computations.
+             </p>
+        </div>
+    </div>
+
+    <!-- Value 3 -->
+    <div>
+        <h3>
+            <a href="#">
+                &nbsp;&nbsp;&nbsp;Dynamic&nbsp;Coalition&nbsp;System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PHP
+            </a>
+        </h3>
+        <div  class="projcontent">
+             <p  align="justify">
+            The project involved implementing a distributed consisting of airline, hotel and car reservation which dynamically can join each other to form coalition system. The project was implemented in PHP with rich user interface for each of the modules which communicate using XML-RPC based service and register their group information with a random selected central coordinator.  To avoid single point of failure (i.e. to provide fault tolerance) and to improve availability/performance the information maintained by central coordinator was replicated at many sites.  
+             </p>
+        </div>
+    </div>
+
+    <!-- Value 4 -->
+    <div>
+        <h3>
+            <a href="#">
+                &nbsp;&nbsp;&nbsp;BioInformatics–Protein&nbsp;Alignment&nbsp;&&nbsp;Modeling&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;JAVA
+            </a>
+        </h3>
+        <div  class="projcontent">
+             <p  align="justify">
+            The project involved implementing a configurable application to show sequence alignment for multiple protein sequences, provided as input PDB files. Also, the alignment information was required to be used further to generate an Output PDB files to identify Strand-Loop-Strand-Loop (SLS) structures of specified Amino Acid Lengths. The generated SLS model for multiple protein sequences was also transformed/rotated to align all the SLS structures over same region. The protein modeling helped in identifying similarity of sequences and their corresponding 2-D structures in the form of strands, loops and helixes.
+             </p>
+        </div>
+    </div>
+
+    <!-- Value 5 -->
+    <div>
+        <h3>
+            <a href="#">
+                &nbsp;&nbsp;&nbsp;Travel Agency System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C# .NET
+            </a>
+        </h3>
+        <div  class="projcontent">
+             <p  align="justify">
+            The project involved implementing a distributed system consisting of users and travel agents managing reservations on behalf of users.  The project incorporated all security features of .NET such as parameterized queries, protection against SQL injection, DoS and buffer overflow attacks, hashed passwords in database, secured communication between distributed modules. Implemented in C# .NET (Visual Studio 2005 IDE) as front-end interface and Oracle 10g as the backend database, the project depicted a regular travel agency system to manage reservations of different car/hotel service providers. 
+             </p>
+        </div>
+    </div>
+
+    <!-- Value 6 -->
+    <div>
+        <h3>
+            <a href="#">
+                &nbsp;&nbsp;&nbsp;Payroll&nbsp;System&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VC++ 6.0
+            </a>
+        </h3>
+        <div  class="projcontent">
+             <p  align="justify">
+            The payroll system depicts a real-world payroll system for a manufacturing organization consisting of various departments and tree structured hierarchy. The system provides rich user interface different for each of the roles. The system provides features such as Earnings calculation, Deductions calculation, Incorporating overtimes/leaves, Tax Calculation, Report generation.
+             </p>
+        </div>
+    </div>
+
+</div>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+          <div style="Z-INDEX: 15; POSITION: relative; WIDTH: 700px; HEIGHT: 120px; MARGIN-LEFT: 0px" id ="footer_layer">
+            <div style="LINE-HEIGHT: 0px; HEIGHT: 0px" class ="bumper"></div>
+            <div style="Z-INDEX: 1; POSITION: absolute;  WIDTH: 700px; HEIGHT: 100px; TOP: 20px; LEFT: 0px" class     ="tinyText style_SkipStroke">
+              <img style="BORDER-BOTTOM: medium none; BORDER-LEFT: medium none; WIDTH: 700px; HEIGHT: 100px; BORDER-TOP: medium none; BORDER-RIGHT: medium none" alt="" src="OtherProjects_files/footer4.jpg" >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+

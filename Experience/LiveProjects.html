@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>Live Projects</title>
+    <link type="text/css" href="include/jquery-ui-1.8.7.custom.css" rel="stylesheet" />	
+    <link type="text/css" href="include/style.css" rel="stylesheet" />	
+    <script type="text/javascript" src="include/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="include/jquery-ui-1.8.7.custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen,print" href="LiveProjects_files/LiveProject.css" />
+    <script type="text/javascript">
+        $(function(){
+
+            // Accordion
+            $("#accordion").accordion({ header: "h3" });
+
+            // Tabs
+            $('#tabs').tabs();
+
+            // Dialog
+            $('#dialog').dialog({
+                autoOpen: false,
+                width: 600,
+                buttons: {
+                    "Ok": function() { 
+                        $(this).dialog("close"); 
+                    }, 
+                    "Cancel": function() { 
+                        $(this).dialog("close"); 
+                    } 
+                }
+            });
+            
+            // Dialog Link
+            $('#dialog_link').click(function(){
+                $('#dialog').dialog('open');
+                return false;
+            });
+
+            // Datepicker
+            $('#datepicker').datepicker({
+                inline: true
+            });
+            
+            // Slider
+            $('#slider').slider({
+                range: true,
+                values: [17, 67]
+            });
+            
+            // Progressbar
+            $("#progressbar").progressbar({
+                value: 20 
+            });
+            
+            //hover states on the static widgets
+            $('#dialog_link, ul#icons li').hover(
+                function() { $(this).addClass('ui-state-hover'); }, 
+                function() { $(this).removeClass('ui-state-hover'); }
+            );
+
+            $(".selector").accordion({clearStyle: true}); 
+        });
+
+        function loadfun()
+        {
+            activelink.style.color = "black";
+        }
+    </script>
+    <style type="text/css">
+    div.stmargin
+    {
+        margin-left:  50px;
+        width: 260px;
+    }
+    div.projcontent
+    {
+        font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+        font-size: 14px;
+        height: 300px;
+    }
+    ul
+    {
+        list-style-type: none;
+        list-style-image: none;
+    }
+
+    ul li
+    {
+       float: left;
+    }
+
+    #active
+    {
+        color: #000000;
+    }
+
+    ul a {
+            color: rgb(125, 131, 137);
+            font-family: 'Palatino-BoldItalic', 'Palatino', serif, bold;
+            font-size: 14px;
+            font-style: italic;
+            font-variant: normal;
+            font-weight: 700;
+            display: block;
+            line-height: 60px;
+            text-align: center;
+            text-decoration: none;
+            text-indent: 0px;
+            text-transform: uppercase;
+            padding-right: 12px;
+            padding-left: 12px;
+        }
+
+        a:active{color :#000000 }
+        a:hover{color :#000000 }
+
+    </style>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-20738656-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </head>
+  <body style="MARGIN: 0pt; BACKGROUND: url(LiveProjects_files/Cloth-3.jpg) rgb(255,255,255) left top" onload="loadfun();">
+    <div style="TEXT-ALIGN: center" >
+      <div style="POSITION: relative; TEXT-ALIGN: left; MARGIN: 15px auto; WIDTH: 700px; WORD-WRAP: break-word; OVERFLOW: hidden" id       ="body_content">
+        <div style="WIDTH: 700px; BACKGROUND: url(LiveProjects_files/page_tile_sidebar_fill2.jpg) left top"    >
+          <div style="Z-INDEX: 10; POSITION: relative; WIDTH: 700px; HEIGHT: 92px; MARGIN-LEFT: 0px" id ="header_layer">
+            <div style="LINE-HEIGHT: 0px; HEIGHT: 0px" class ="bumper"></div>
+            <div style="Z-INDEX: 1; POSITION: absolute;  WIDTH: 700px; HEIGHT: 26px; TOP: 0px; LEFT: 0px" class ="tinyText style_SkipStroke">
+              <img style="BORDER-BOTTOM: medium none; BORDER-LEFT: medium none; WIDTH: 700px; HEIGHT: 26px; BORDER-TOP: medium none; BORDER-RIGHT: medium none" alt="" src="LiveProjects_files/header.jpg" >
+            </div>
+            <div id="id1" style="Z-INDEX: 1; POSITION: absolute; WIDTH: 642px; HEIGHT: 59px; TOP: 33px; LEFT: 28px" class ="style_SkipStroke_1 shape-with-text">
+              <div class="text-content Normal_External_642_59" style="PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; PADDING-TOP: 0px">
+                <div class="Normal">
+                  <p style="PADDING-BOTTOM: 0pt; PADDING-TOP: 0pt" class ="paragraph_style">Live Projects</p>
+                  <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="Academics.html">Academics</a></li>
+                    <li><a href="Experience.html">Experience</a></li>
+                    <li><a id="active" href="LiveProjects.html">Live Projects</a></li>
+                    <li><a href="OtherProjects.html">Other Projects</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="Z-INDEX: 0; POSITION: relative; WIDTH: 28px; HEIGHT: 56px; MARGIN-LEFT: 0px" id="nav_layer">
+            <div style="LINE-HEIGHT: 0px; HEIGHT: 0px" class ="bumper"></div>
+            <div style="Z-INDEX: 1; POSITION: absolute;  WIDTH: 700px; HEIGHT: 450px; TOP: -450px; LEFT: 0px" class     ="tinyText style_SkipStroke">
+              <img style="BORDER-BOTTOM: medium none; BORDER-LEFT: medium none; WIDTH: 700px; HEIGHT: 500px; BORDER-TOP: medium none; BORDER-RIGHT: medium none" alt="" src="LiveProjects_files/flourish_purple_top.png" >
+            </div>
+            <div style="LINE-HEIGHT: 1px; HEIGHT: 1px" class ="tinyText"></div>
+            <div style="LINE-HEIGHT: 0px; HEIGHT: 0px; CLEAR: both" class ="spacer"></div>
+          </div>
+
+    <div style="Z-INDEX: 0; POSITION: absolute; TOP: 175px; WIDTH: 620px; MARGIN-LEFT: 40px" id="accordion">
+    <!-- Value 1 -->
+    <div>
+        <h3>
+            <a href="#">
+                &nbsp;&nbsp;&nbsp;Routing&nbsp;Software&nbsp;Panels&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Harris&nbsp;Corporation
+            </a>
+        </h3>
+        <div  class="projcontent">
+             <p  align="justify">
+            The project involved developing a reconfigurable software panel to communicate with various broadcasting router devices.  The front-end was implemented in Silverlight 4.0 (using MVVM architecture) to provide rich interface and multiplatform support. The back-end consisted of two modules, of which one was implemented in C# .NET for communication with the front-end module and other in Visual C++ 2010, as a wrapper for communicating with the hardware device. The entire application provided easy reconfiguration and supported different types of router hardware. The developed application is now in production for Broadcast division.
+             </p>
+        </div>
+    </div>
+
+    <!-- Value 2 -->
+    <div>
+        <h3>
+            <a href="#">
+                &nbsp;&nbsp;&nbsp;Blackberry&nbsp;Applications&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Raytheon-ODU
+            </a>
+        </h3>
+        <div  class="projcontent">
+             <p  align="justify">
+            The Blackberry mobile application suite was designed for business usage to provide quick access to critical information in comprehensible format. The suite was created using custom library of different widgets created in Blackberry JDE 4.7.0. The suite includes applications such as Dashboard, Part Availability Snapshot, Site Maps and Barcode Reader. The Dashboard application provides quick visual of metrics in the form of charts, level indicators, stoplights etc. The Part Availability snapshot provides managers with critical information about the availability of different parts at different site locations in a grid view format. The Site Maps provides summary information about different locations which can be traced using world maps. The Barcode Reader allows mobile devices to decode barcode printed on inventory item and provide information about its availability, usage, requirement at various site locations. The application suite received high appreciation at the MMIS Eagle Conference held in Tucson, Arizona during September, 2009.
+             </p>
+        </div>
+    </div>
+
+    <!-- Value 3 -->
+    <div>
+        <h3>
+            <a href="#">
+                &nbsp;&nbsp;&nbsp;Offline&nbsp;Tool&nbsp;(MMIS&nbsp;Lite)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Raytheon-ODU
+            </a>
+        </h3>
+        <div  class="projcontent">
+             <p  align="justify">
+            MMIS Lite is an integrated solution for rapid development and deployment of enterprise applications for mobile and lightweight environments. It allows mobile workers to access enterprise data even in the absence of a network connection. Additionally, the tool uses data synchronization to allow these workers to reliably and securely exchange data with the corporate back end database. The mobile client users perform various transactions using the data stored in light database. Once, the network connectivity is available the mobile client interact with mobile server to synchronize their data with the back-end database. Thus enterprise data is accessed and operations are performed by the application without network access. The project involved usage of tools/technologies such as Java, JSP, PL-SQL, Oracle Lite 11g and Oracle 11g database. 
+             </p>
+        </div>
+    </div>
+
+    <!-- Value 4 -->
+    <div>
+        <h3>
+            <a href="#">
+                &nbsp;&nbsp;&nbsp;Physiotherapy&nbsp;Analysis&nbsp;-&nbsp;Sensor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ODU
+            </a>
+        </h3>
+        <div  class="projcontent">
+             <p  align="justify">
+            The sensor project involved implementing a rich interface application for physiotherapists which communicates with sensor devices to track various motions providing information helpful for diagnoses. Polhemus sensor devices were used which consisted of two stylus pens all connected to reader device interfaced with computer via serial-port. The patients were given stylus pens in one hand each and were asked to perform various motions. The sensor application was developed in Visual C++ 2005 which interfaced with Polhemus Reader measured various positions and created a normal baseline. The stylus provided a button which can be triggered as patient feels pain at particular point while performing motions. The Sensor Application reads all such points flagged with stylus trigger button and plots detailed graph comparing normal results with abnormal results (pain points resulting in abnormal motion). The graphs plotted provided extensive information to the physiotherapists to diagnose injury problems associated with sports persons.
+             </p>
+        </div>
+    </div>
+
+    <!-- Value 5 -->
+    <div>
+        <h3>
+            <a href="#">
+                &nbsp;&nbsp;&nbsp;Automated&nbsp;Replication&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VCU-ODU
+            </a>
+        </h3>
+        <div  class="projcontent">
+             <p  align="justify">
+            The Virginia Common Wealth University (VCU) assigned a project which required implementing an XML-RPC based web service to keep database information in sync at local site as well as central site.  ODU hosts a central store for different contracts with hardware/software vendors and allows collaborated universities to share their information using the central site. The central site implemented by ODU is called VASCUPP, implemented in PHP which provides access to central database (MySQL).  Most of the universities have their own personal websites in PHP to access their local database for contracts.  A contract change at local site was required to be modified at central site and vice versa. Thus, to resolve manual cascading work of updating information at various sites a XML-RPC web service was implemented. The web service is configurable to work with any website as well as platform independent. It synchronizes the contract edit operations without requiring manual intervention and also provides features such as logging information for debugging, option to rollback transactions and maintaining restore points, related recovery.
+             </p>
+        </div>
+    </div>
+
+    <!-- Value 6 -->
+    <div>
+        <h3>
+            <a href="#">
+                &nbsp;&nbsp;&nbsp;Mobile&nbsp;Applications&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HPBC-ODU
+            </a>
+        </h3>
+        <div  class="projcontent">
+             <p  align="justify">
+            The Blackberry/IPhone mobile application suite was designed for medical usage for doctors and nurses which provided quick access to information about patients, appointments, medical history, alerts. The suite consists of applications such as Patient History, Patient Alert and Dashboard.  The Patient History Application is used by doctors to quickly check information such as previous injuries/illness, medical history, nurses/doctors which attended the patients previously and detailed personal information. The Patient Alert application pushes important alerts/updates about particular patients which can be configured by respective users. The Dashboard application is particularly useful for hospital managers which provide quick visuals of current scenario such as doctors/nurses available, free beds along with their locations, metrics such as patients’ admitted/discharged, medications/technologies availability and their requirement.  
+             </p>
+        </div>
+    </div>
+
+    <!-- Value 7 -->
+    <div>
+        <h3>
+            <a href="#">
+                &nbsp;&nbsp;&nbsp;SCSI&nbsp;Tape&nbsp;Drive&nbsp;Tool&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Zensar-Fujitsu
+            </a>
+        </h3>
+        <div  class="projcontent">
+             <p  align="justify">
+            The SCSI Tape Drive tool is used to diagnose the performance of different tape devices like DDS4/DAT72, DLT/SDLT and LTO from various vendors. The tool helped Fujitsu vendors trace read/write problems associated with Tape drives (readers) and Magnetic Tapes (diskettes). The tool was implemented for Windows, Linux and Solaris platforms. The backend code (wrapper) to communicate with the tape-devices used sg & st drivers in Linux & Solaris respectively and Windows Tape Class drivers & SCSI miniport drivers for Windows. Linux/Solaris code was entirely written in C with Character User Interface and for Windows rich interface was created using Multiple-document interface of Visual C++ 2005. The project helped to gain in-depth knowledge of SCSI communication, tape drives architecture and different types of IPC.
+             </p>
+        </div>
+    </div>
+
+    <!-- Value 8 -->
+    <div>
+        <h3>
+            <a href="#">
+                &nbsp;&nbsp;&nbsp;CBay&nbsp;Dictation&nbsp;Server&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Zensar-Fujitsu
+            </a>
+        </h3>
+        <div  class="projcontent">
+             <p  align="justify">
+            C-Bay is a dictation server for medical transcription using IVRS. The project required implementing an SNMP Agent which runs as a service and collects information of different channels from various sites and SNMP Manager Component installed at server to process the updates received through SNMP Agent.  The entire project was developed using Visual Studio 2005 IDE, with SNMP Agent as a DLL and SNMP Manager as a MFC Application. The SNMP Agent-Manager was developed as reusable component which was later incorporated into many other projects across division. 
+             </p>
+        </div>
+    </div>
+
+    <!-- Value 9 -->
+    <div>
+        <h3>
+            <a href="#">
+            &nbsp;&nbsp;&nbsp;Global&nbsp;Sign-On&nbsp;using&nbsp;Smart&nbsp;Card&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IBM-ISL
+            </a>
+        </h3>
+        <div  class="projcontent">
+             <p  align="justify">
+            IBM-ISL required implementing software to allow its employees to manage personal information and digital certificates onto their authorized smart cards. The software was implemented using Visual C++ 6.0 which demonstrated storage of personal information such as email accounts, allowing users to automatically logon to their accounts without any manual intervention. The hardware devices used was Philips Mifare series contactless smart card reader with serial-port interface and 16KB/32KB Smart Cards.  The software consisted of backend (wrapper) implemented as Win32 Application which communicates with Smart Card reader and front end developed as MFC Application with Single Document Interface. Initially prototype was also developed in Visual Basic 6.0 to design and test communication protocol for Smart Card Reader.
+             </p>
+        </div>
+    </div>
+
+    <!-- Value 10 -->
+    <div>
+        <h3>
+            <a href="#">
+            &nbsp;&nbsp;&nbsp;Sniffer&nbsp;Detection&nbsp;Tool&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IBM-ISL
+            </a>
+        </h3>
+        <div  class="projcontent">
+             <p  align="justify">
+IBM-ISL sponsored my innovative idea of Sniffer Detection Tool (which detects sniffer executing in a LAN). I developed the tool in C (for Linux Platform) to construct raw packet and send the same over network. The project required high-level understanding of TCP/IP stack concepts and implementation details. As, Sniffing attacks are passive in nature they do not give any indication of the activity and thus such attacks goes undetected. However, studies show that as sniffers execute on default TCP/IP stack, when queried with invalid requests the machines tend to respond. The detection tool works on the principle of sending invalid ICMP echo message targeted for a suspicious machine on to the network segment and checking for ICMP replies. The tool uses libnet and pcap libraries to construct/send invalid packets to target machines and study their behaviors to detect sniffer. The tool was very powerful to detect sniffers such as Tcpdump, EtherDetect and WireShark. Also the performance was found to be better as compared to other detectors.
+             </p>
+        </div>
+    </div>
+
+
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+          <div style="Z-INDEX: 15; POSITION: relative; WIDTH: 700px; HEIGHT: 120px; MARGIN-LEFT: 0px" id ="footer_layer">
+            <div style="LINE-HEIGHT: 0px; HEIGHT: 0px" class ="bumper"></div>
+            <div style="Z-INDEX: 1; POSITION: absolute;  WIDTH: 700px; HEIGHT: 100px; TOP: 20px; LEFT: 0px" class     ="tinyText style_SkipStroke">
+              <img style="BORDER-BOTTOM: medium none; BORDER-LEFT: medium none; WIDTH: 700px; HEIGHT: 100px; BORDER-TOP: medium none; BORDER-RIGHT: medium none" alt="" src="LiveProjects_files/footer4.jpg" >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+
