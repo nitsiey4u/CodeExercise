@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>Academics</title>
+    <link type="text/css" href="include/jquery-ui-1.8.7.custom.css" rel="stylesheet" />	
+    <link type="text/css" href="include/style.css" rel="stylesheet" />	
+    <script type="text/javascript" src="include/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="include/jquery-ui-1.8.7.custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen,print" href="Academics_files/Academics.css" />
+    <script type="text/javascript">
+        $(function(){
+
+            // Accordion
+            $("#accordion").accordion({ header: "h3" });
+
+            // Tabs
+            $('#tabs').tabs();
+
+            // Dialog
+            $('#dialog').dialog({
+                autoOpen: false,
+                width: 600,
+                buttons: {
+                    "Ok": function() { 
+                        $(this).dialog("close"); 
+                    }, 
+                    "Cancel": function() { 
+                        $(this).dialog("close"); 
+                    } 
+                }
+            });
+            
+            // Dialog Link
+            $('#dialog_link').click(function(){
+                $('#dialog').dialog('open');
+                return false;
+            });
+
+            // Datepicker
+            $('#datepicker').datepicker({
+                inline: true
+            });
+            
+            // Slider
+            $('#slider').slider({
+                range: true,
+                values: [17, 67]
+            });
+            
+            // Progressbar
+            $("#progressbar").progressbar({
+                value: 20 
+            });
+            
+            //hover states on the static widgets
+            $('#dialog_link, ul#icons li').hover(
+                function() { $(this).addClass('ui-state-hover'); }, 
+                function() { $(this).removeClass('ui-state-hover'); }
+            );
+
+            $(".selector").accordion({clearStyle: true}); 
+        });
+
+        function loadfun()
+        {
+            activelink.style.color = "black";
+        }
+    </script>
+    <style type="text/css">
+    ul
+    {
+        list-style-type: none;
+        list-style-image: none;
+    }
+
+    ul li
+    {
+       float: left;
+    }
+
+    #active
+    {
+        color: #000000;
+    }
+
+    ul a {
+            color: rgb(125, 131, 137);
+            font-family: 'Palatino-BoldItalic', 'Palatino', serif, bold;
+            font-size: 14px;
+            font-style: italic;
+            font-variant: normal;
+            font-weight: 700;
+            display: block;
+            line-height: 60px;
+            text-align: center;
+            text-decoration: none;
+            text-indent: 0px;
+            text-transform: uppercase;
+            padding-right: 12px;
+            padding-left: 12px;
+        }
+
+        a:active{color :#000000 }
+        a:hover{color :#000000 }
+
+    </style>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-20738656-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </head>
+  <body style="MARGIN: 0pt; BACKGROUND: url(Academics_files/Cloth-3.jpg) rgb(255,255,255) left top" onload="loadfun();">
+    <div style="TEXT-ALIGN: center" >
+      <div style="POSITION: relative; TEXT-ALIGN: left; MARGIN: 15px auto; WIDTH: 700px; WORD-WRAP: break-word; OVERFLOW: hidden" id       ="body_content">
+        <div style="WIDTH: 700px; BACKGROUND: url(Academics_files/page_tile_sidebar_fill2.jpg) left top"    >
+          <div style="Z-INDEX: 10; POSITION: relative; WIDTH: 700px; HEIGHT: 92px; MARGIN-LEFT: 0px" id ="header_layer">
+            <div style="LINE-HEIGHT: 0px; HEIGHT: 0px" class ="bumper"></div>
+            <div style="Z-INDEX: 1; POSITION: absolute;  WIDTH: 700px; HEIGHT: 26px; TOP: 0px; LEFT: 0px" class ="tinyText style_SkipStroke">
+              <img style="BORDER-BOTTOM: medium none; BORDER-LEFT: medium none; WIDTH: 700px; HEIGHT: 26px; BORDER-TOP: medium none; BORDER-RIGHT: medium none" alt="" src="Academics_files/header.jpg" >
+            </div>
+            <div id="id1" style="Z-INDEX: 1; POSITION: absolute; WIDTH: 642px; HEIGHT: 59px; TOP: 33px; LEFT: 28px" class ="style_SkipStroke_1 shape-with-text">
+              <div class="text-content Normal_External_642_59" style="PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; PADDING-TOP: 0px">
+                <div class="Normal">
+                  <p style="PADDING-BOTTOM: 0pt; PADDING-TOP: 0pt" class ="paragraph_style">Academics</p>
+                  <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a id="active" href="Academics.html">Academics</a></li>
+                    <li><a href="Experience.html">Experience</a></li>
+                    <li><a href="LiveProjects.html">Live Projects</a></li>
+                    <li><a href="OtherProjects.html">Other Projects</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="Z-INDEX: 0; POSITION: relative; WIDTH: 28px; HEIGHT: 56px; MARGIN-LEFT: 0px" id="nav_layer">
+            <div style="LINE-HEIGHT: 0px; HEIGHT: 0px" class ="bumper"></div>
+            <div style="Z-INDEX: 1; POSITION: absolute;  WIDTH: 700px; HEIGHT: 450px; TOP: -450px; LEFT: 0px" class     ="tinyText style_SkipStroke">
+              <img style="BORDER-BOTTOM: medium none; BORDER-LEFT: medium none; WIDTH: 700px; HEIGHT: 500px; BORDER-TOP: medium none; BORDER-RIGHT: medium none" alt="" src="Academics_files/flourish_yellow_top.png" >
+            </div>
+            <div style="LINE-HEIGHT: 1px; HEIGHT: 1px" class ="tinyText"></div>
+            <div style="LINE-HEIGHT: 0px; HEIGHT: 0px; CLEAR: both" class ="spacer"></div>
+          </div>
+
+
+            <div id="id1" style="Z-INDEX: 1; POSITION: absolute; WIDTH: 642px; HEIGHT: 59px; TOP: 175px; LEFT: 28px" class ="style_SkipStroke_1 shape-with-text">
+              <div class="text-content Normal_External_500_56" style="PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; PADDING-TOP: 0px">
+                <div class="Normal">
+                  <p style="PADDING-TOP: 0pt" class ="Title">Education<br ></p>
+                  <div class="paragraph Title" style="PADDING-BOTTOM: 0pt" ><div id="id2" style="POSITION: relative; WIDTH: 71px; HEIGHT: 24px" class ="style_SkipStroke_2 shape-with-text inline-block"><div class="text-content graphic_shape_layout_style_default_External_71_24" style="PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; PADDING-TOP: 0px"><div class="graphic_shape_layout_style_default"></div></div></div></div>
+                </div>
+                <div style="LINE-HEIGHT: 0px; HEIGHT: 0px; CLEAR: both" class ="tinyText"></div>
+              </div>
+            </div>
+
+             <table style="POSITION: absolute; WIDTH: 613px; HEIGHT: 160px; TOP: 225px; LEFT: 34px" align="center" id="rounded-corner" width="613">
+                    <tr>
+                            <th> University</th>
+                            <th> Degree </th>
+                            <th> GPA/Grade </th>
+                            <th> Year </th>
+                            <tr>
+                                <td>Old Dominion University,<br/>Norfolk, VA, 23508</td>
+                                <td>Masters in Computer Science</td>
+                                <td>GPA: 3.97</td>
+                                <td>December, 2010</td>
+                            </tr>
+                            <tr >
+                                <td>College of Engineering Pune (COEP), Pune, India</td>
+                                <td>Bachelor of Engineering - Information Technology</td>
+                                <td>First Class with Distinction</td>
+                                <td>May, 2006</td>
+                            </tr>
+                            <tr >
+                                <td>Bharat English School,<br/>Pune, India</td>
+                                <td>Higher School Certificate (12th Standard)</td>
+                                <td>First Class with Distinction</td>
+                                <td>May, 2002</td>
+                            </tr>
+                            <tr >
+                                <td>Hindustan Antibiotics School,<br/>Pune, India</td>
+                                <td>Secondary School Certificate  (10th Standard)</td>
+                                <td>First Class with Distinction</td>
+                                <td>May, 2000</td>
+                            </tr>
+                </table>
+
+              <div id="id5" style="Z-INDEX: 1; POSITION: absolute; WIDTH: 500px; HEIGHT: 56px; TOP: 550px; LEFT: 100px" class ="style_SkipStroke_3 shape-with-text">
+              <div class="text-content Normal_External_500_56" style="PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; PADDING-TOP: 0px">
+                <div class="Normal">
+                  <p style="PADDING-TOP: 0pt" class ="Title">Achievements<br ></p>
+                  <div class="paragraph Title" style="PADDING-BOTTOM: 0pt" ><div id="id4" style="POSITION: relative; WIDTH: 71px; HEIGHT: 24px" class ="style_SkipStroke_4 shape-with-text inline-block"><div class="text-content graphic_shape_layout_style_default_External_71_24" style="PADDING-BOTTOM: 0px; PADDING-LEFT: 0px; PADDING-RIGHT: 0px; PADDING-TOP: 0px"><div class="graphic_shape_layout_style_default"></div></div></div></div>
+                </div>
+                <div style="LINE-HEIGHT: 0px; HEIGHT: 0px; CLEAR: both" class ="tinyText"></div>
+              </div>
+            </div>
+            
+            <table style="POSITION: absolute; WIDTH: 613px; HEIGHT: 160px; TOP: 600px; LEFT: 34px" align="center" id="rounded-corner" width="613">
+                <tr>
+                    <td>Received <b>Honors - Masters in Computer Science for excellent academic record of 3.97 GPA</b></td>
+                </tr>
+                <tr>
+                    <td><b>Certificate in Information Technology</b> for: C++, Java, Linux, HTML and OS internals</td>
+                    </tr>
+                <tr>
+                    <td>Received appreciation for business mobile applications suite developed for <b>Raytheon</b> which were presented in <b>MMIS Eagle Conference, Tucson, Arizona in Sept, 2009</b></td>
+                </tr>
+                <tr>
+                    <td>Presented Research Paper on <b>Sniffer Detection - A Network Security Measure during Bachelor's</b></td>
+                <tr>
+                <tr>
+                    <td><b>Innovative projects sponsored by IBM: Sniffer Detection Tool</b> (to detect sniffer executing in LAN) and <b>Global Sign-On Smart Card </b> (to automatically sign into email accounts  and use digital signatures for authentication using smart cards)</td>
+                </tr>
+                <tr>
+                    <td>Always among top 5 rank makers. <b>In 11th Standard stood 1st in school. In 12th Standard, stood 2nd in school with score of 96% in University for Physics, Chemistry and Maths</b></td>
+                </tr>
+            </table>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+          <div style="Z-INDEX: 15; POSITION: relative; WIDTH: 700px; HEIGHT: 120px; MARGIN-LEFT: 0px" id ="footer_layer">
+            <div style="LINE-HEIGHT: 0px; HEIGHT: 0px" class ="bumper"></div>
+            <div style="Z-INDEX: 1; POSITION: absolute;  WIDTH: 700px; HEIGHT: 100px; TOP: 20px; LEFT: 0px" class     ="tinyText style_SkipStroke">
+              <img style="BORDER-BOTTOM: medium none; BORDER-LEFT: medium none; WIDTH: 700px; HEIGHT: 100px; BORDER-TOP: medium none; BORDER-RIGHT: medium none" alt="" src="Academics_files/footer4.jpg" >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+
